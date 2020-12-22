@@ -1,0 +1,50 @@
+<div class="mt-4">
+  <%= form_for @query, :url => admin_roles_path, :html => {:method => :get, :class => "well form-search form-inline"}  do |f| %>
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+      <label>角色名称:</label>
+        <%= f.text_field :name_cont,class: 'form-control ',placeholder: "角色名称" %>
+      </div>
+      <%= render 'admin/shared/search_buttons',total_num:  @query.result.count %>
+    </div>
+  <% end %>
+</div>
+<div class="card-body">
+  <div class="page-header">
+    <%= link_to '新增角色',new_admin_role_path,class: 'btn btn-primary btn-sm ' if can? :new,Role %>
+  </div>
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="w80">序号</th>
+          <th class="w120">名称</th>
+          <th class="w100">编码</th>
+          <th>描述</th>
+          <th class="w100">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @roles.each_with_index do |role, index| %>
+        <tr>
+          <td ><%= show_index(index, @roles.length )%></td>
+          <td><%= role.try(:name) %></td>
+          <td><%= role.try(:code)%></td>
+          <td class="text-left" >
+              <%= tooltip(role.desc ,length: 20 ) %>
+          </td>
+          <td>
+            <% edit_link = link_to '修改', edit_admin_role_path(role) if can? :edit,role %>
+            <% show_link = link_to '查看', admin_role_path(role,back: request.fullpath) if can? :show,role  %>
+            <% destroy_link = link_to '删除', admin_role_path(role, :back => request.fullpath), :method => :delete, data: { confirm: '确定要刪除吗?' } if can? :destroy,role %>
+           <% assign_menu_link = link_to '分配菜单', assign_menus_admin_role_path(role, :back => request.fullpath)  if can? :assign_menus, role %>
+           <% assign_permission_link = link_to '分配权限', assign_permissions_admin_role_path(role, :back => request.fullpath) if can? :assign_permissions, role  %>
+           <%= operate_buttons([edit_link, destroy_link,show_link,assign_menu_link,assign_permission_link].compact) %>
+          </td>
+        </tr>
+        <% end -%>
+      </tbody>
+    </table>
+    <%= paginate @roles %>
+  </div>
+</div>

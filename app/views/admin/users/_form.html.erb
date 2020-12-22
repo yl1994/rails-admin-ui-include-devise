@@ -1,0 +1,139 @@
+<%= form_for [:admin, @user] ,html: {class: 'valid_engine'} do |f| %>
+    <%= hidden_field_tag :model_name, 'User' %>
+    <%= hidden_field_tag :model_id, f.object.id %>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <%= require_span %><%= f.label :loginname,class: 'col-form-label' %>
+      </div>
+      <div class="col-sm-4 ">
+        <%= f.text_field :loginname, autofocus: true, autocomplete: "loginname",class: 'form-control validate[required,funcCall[checkUniqField]]',model_id: f.object.id,model_name: 'User', column_name: 'loginname' ,error_msg: '登录名已被其他人使用' ,placeholder:"用户名" %>
+      </div>
+      <div class="col-sm-2 text-right">
+        <%= require_span %><%= f.label :phone,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= f.text_field :phone, autofocus: true, autocomplete: "phone",class: "form-control form-control-user validate[required,custom[phone],funcCall[checkUniqField]]",model_id: f.object.id,model_name: 'User', column_name: 'phone' ,error_msg: '手机号已被其他人使用',placeholder:"手机号" %>
+      </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+       <%= f.label :realname,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= f.text_field :realname, autofocus: true,class: "form-control form-control-user",placeholder:"真实姓名" %>
+      </div>
+      <div class="col-sm-2 text-right">
+        <%= f.label :email,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",class: "form-control form-control-user validate[email]",placeholder:"邮箱" %>
+      </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+       <%= f.label :department,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= f.select :department_id, Department.pluck(:name,:id),{include_blank: '请选择'},class: 'custom-select validate[required]'%>
+      </div>
+      <div class="col-sm-2 text-right">
+        <%= f.label :role,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= f.select :role_ids, Role.pluck(:name,:id),{include_blank: '请选择'},class: 'custom-select select2 validate[required]',multiple: true %>
+
+        <%#= select_tag "user[role_ids]", options_for_select(Role.pluck(:name,:id), @user.role_ids) ,class: "js_select2 w",multiple: true %>
+      </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <%= f.label :project_count,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= f.text_field :project_count,class: "form-control form-control-user validate[custom[integer]]",placeholder:"项目限制条数" %> 
+      </div>
+    </div>
+
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <%= f.label :signature,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-10 mb-3 mb-sm-0">
+        <% if  @user.e_signature.attached?   %>
+          <%= link_to_blank url_for(@user.e_signature) do  %>
+            <%= image_tag url_for(@user.e_signature) %>
+          <% end %>
+          重新上传：<%= f.file_field :e_signature,class: "validate[custom[jpgOrPng]]" %>
+        <% else %>
+          <%= f.file_field :e_signature,class: "validate[custom[jpgOrPng]]" %>
+        <% end %>
+      </div>
+    </div>
+    <% if @user.new_record? %>
+      <div class="form-group row justify-content-start align-items-center">
+        <div class="col-sm-2 text-right">
+          <%= require_span %><%= f.label :password,class: 'col-form-label'%>
+        </div>
+        <div class="col-sm-4 mb-3 mb-sm-0">
+          <%= f.password_field :password, autocomplete: "new-password",class: "form-control form-control-user validate[required]",placeholder:"密码" %>
+        </div>
+        <div class="col-sm-2 text-right">
+          <%= require_span %><%= f.label :password_confirmation,class: 'col-form-label'%>
+        </div>
+        <div class="col-sm-4 mb-3 mb-sm-0">
+          <%= f.password_field :password_confirmation, autocomplete: "new-password",class: "form-control form-control-user validate[required]",placeholder:"确认密码" %>
+        </div>
+      </div>
+    <% end %>
+
+  <div class="w-75 p-3 mx-auto text-center">
+    <%= f.submit '提交', class: "btn btn-primary" %>
+    <%= link_to_back url: params[:back] || admin_users_path(@user) %>
+  </div>
+<% end -%>
+
+<script type="text/javascript">
+ // select2 初始化
+    $('.select2').select2({
+      theme: 'bootstrap4',
+       language: {
+          noResults: function(params) {
+              return "暂无数据";
+          }
+     }
+    });
+   // 验证唯一性
+  function checkUniqField(field, rules, i, options){
+    var model_id = field.attr("model_id");
+    var model_name = field.attr("model_name");
+    var column_name = field.attr("column_name");
+    var fieldValue = field.val();
+    var error_msg = field.attr("error_msg")
+    if(!model_name){
+      return console.error('缺少参数 model_name')
+    }
+    if(!column_name){
+      return console.error('缺少参数 column_name')
+    }
+   
+    flag = false;
+    $.ajax({
+      url: '/check_uniq',
+      async: false,
+      data:{model_id: model_id, fieldValue: fieldValue, model_name: model_name,column_name: column_name},
+    })
+    .done(function(data) {
+      if(data[1]){ flag = true };
+    })
+    .fail(function() {
+      console.log("error");
+    })
+    .always(function() {
+      console.log("complete");
+    }); 
+    if(!flag){
+
+      return error_msg || '已被其他人使用';
+    }
+  }
+</script>

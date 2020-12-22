@@ -1,0 +1,94 @@
+<div class="mt-4">
+  <%= form_for @query, :url => admin_users_path, :html => {:method => :get, :class => "well form-search form-inline"}  do |f| %>
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <labe>名称：</label>
+        <%= f.text_field :loginname_or_phone_or_department_name_cont,class: 'form-control w230',placeholder: "用户名、单位名称、手机号" %>
+      </div>
+      <div class="col-auto">
+      <labe>用户身份：</label>
+        <%= f.select :roles_id_eq,Role.pluck(:name,:id), {include_blank: '不限'},{class: 'custom-select-fixed-width'}  %>
+      </div>
+      <%= render 'admin/shared/search_buttons',total_num:  @query.result.count %>
+    </div>
+  <% end %>
+</div>
+
+<div class="card-body">
+  <div class="page-header">
+    <%#= link_to '新增用户',new_admin_user_path,class: 'btn btn-primary btn-sm ' if can? :new, User %>
+  </div>
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="w60">序号</th>
+          <th class="w100">登录名</th>
+          <th class="w100">姓名</th>
+          <th class="w180">单位名称</th>
+          <th class="w100">用户身份</th>
+          <th class="w100">手机号</th>
+          <th class="w100">用户状态</th>
+          <th class="w180">上次登录时间</th>
+          <th class="w80">登陆次数</th>
+          <th class="w100">最近登录ip</th>
+          <th class="w100">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each_with_index do |user, index| %>
+          <tr id="<%= user.id %>">
+          <td class="text-center"><%= show_index(index)%></td>
+          <td><%= user.loginname %></td>
+          <td><%= user.realname %></td>
+          <td><%= user.department_name %></td>
+          <td class="text-left" >
+              <%= user.roles_name.join('、')%>
+          </td>
+          <td><%= user.try(:phone) %></td>
+          <td>
+             <%= User::STATUS[user.status] %>
+          </td>
+          <td><%=  tooltip(user.last_sign_in_at.to_date,title: user.last_sign_in_at.to_s) if user.last_sign_in_at %></td>
+          <td><%= user.sign_in_count %></td>
+          <td><%= user.last_sign_in_ip %></td>
+          <td class="textc">
+            <% show_link = link_to '查看', admin_user_path(user, back: request.fullpath)  if can? :show, user %>
+            <%  button_arr = [] %>
+              <% (User::STATUS.keys - [user.status]).each do |status| %>
+              <% button_arr << link_to(User::STATUS[status], freeze_user_admin_user_path(user, :status => status, :back => request.fullpath), data: { confirm: '确认要将此用户状态改为' + User::STATUS[status] + '吗?' }) if can? :freeze_user,user %>
+            <% end %>
+            <% edit_link = link_to '修改', edit_admin_user_path(user, back: request.fullpath) if can? :edit, user   %>
+            <%# assign_leader_link = link_to '分配科室', assign_leader_admin_user_path(user, :back => request.fullpath),remote: true  if can? :assign_leader,user%>
+            <%# cancel_assign_link = link_to '取消科室', cancel_assign_admin_user_path(user, :back => request.fullpath),remote: true  if user.user_departments.present? && (can? :cancel_assign,user) %>
+            <%# assign_link = link_to '分配角色', assign_roles_admin_user_path(user, :back => request.fullpath) if can? :assign_roles, user %>
+          <!--   <%# assign_department_link = link_to '分配单位', assign_departments_admin_user_path(user, :back => request.fullpath) if can? :assign_departments, user %> -->
+          
+              <% destroy_link = link_to '删除', admin_user_path(user, :back => request.fullpath), :method => :delete, data: { confirm: '确定要刪除吗?' } if (can? :destroy, user) && user.id > 1 %>
+            
+            <% reset_password_link = link_to "重置密码", reset_password_admin_user_path(user, :back => request.fullpath), data:{confirm: '确认要重置密码为123456吗？', method: :put} if can? :reset_password, user  %>
+            <%= operate_buttons((button_arr | [show_link,edit_link,destroy_link,reset_password_link]).compact)%>
+          </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <%= paginate @users %>
+  </div>
+</div>
+
+<div class="modal fade" id="assign_leader" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <%= render 'assign_leader' %>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="cancel_assign" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <%= render 'cancel_assign' %>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,121 @@
+<div class=" py-2 text-center">
+  <h4>南通市通州区农业项目验收申请表</h4>
+</div>
+<%= form_for @certificate, :url => edit_certificate_do_admin_project_path(@project), remote: true, :html => {:method => :post, :class => "mt10 valid_engine",id: 'edit_certificate_form'}  do |f| %> 
+    <div class="row justify-content-start align-items-center">
+      <div class="col-sm-2 font-weight-bold  py-2 text-right">承办科室</div>
+      <div class="col-sm-4  py-2 text-left"><%= @project.department_name %>
+      </div>
+      <div class="col-sm-2 font-weight-bold  py-2 text-right">
+         <%= require_span %> <%= f.label :apply_at,class: 'col-form-label'%>
+       </div>
+       <div class="col-sm-4 mb-3 mb-sm-0">
+          <%= f.text_field :apply_at, class: 'form-control flatpickr validate[required]' ,placeholder:"申请时间" %>
+       </div>
+    </div>
+
+    <div class="form-group row justify-content-start align-items-center">
+       <div class="col-sm-2 text-right font-weight-bold  py-2">
+         项目名称
+       </div>
+       <div class="col-sm-4">
+         <%= @project.name %>
+       </div>
+      <div class="col-sm-2 text-right font-weight-bold  py-2">
+        实施单位
+      </div>
+      <div class="col-sm-4">
+        <%= @project.construct_company_name %>
+      </div>
+    </div>
+
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right font-weight-bold  py-2">
+        <%= require_span %><%= f.label :basis,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-10 mb-3 mb-sm-0">
+        <%= f.text_area :basis, class: 'form-control validate[required]' , placeholder:"验收依据" %>
+      </div>
+    </div>
+    
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right font-weight-bold  py-2">
+        <%= require_span %><%= f.label :content,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-10 mb-3 mb-sm-0">
+        <%= f.text_area :content, class: 'form-control validate[required]' , placeholder:"主要验收内容 " %>
+      </div>
+    </div>
+
+    <div class="row justify-content-start align-items-center">
+      <div class="col-sm-2 font-weight-bold  py-2 text-right">
+        <%= require_span %> <%= f.label :acceptance_type,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-10 mb-3 mb-sm-0">
+        <%= f.radio_button :acceptance_type, 1, class: 'validate[required]'%>核查验收
+        <%= f.radio_button :acceptance_type, 2, class: 'validate[required]' %>联合验收
+        <%= f.radio_button :acceptance_type, 3, class: 'validate[required]' %>专家验收
+        <%= f.radio_button :acceptance_type, 4, class: 'validate[required]' %>委托第三方验收办法
+        <%= f.radio_button :acceptance_type, 5, class: 'validate[required]' %>综合验收
+        <%= f.radio_button :acceptance_type, 6, class: 'validate[required]' %>其他
+      </div>
+    </div>
+
+    <div class="row justify-content-start align-items-center">
+      <div class="col-sm-2 font-weight-bold  py-2 text-right">
+         <%= require_span %> <%= f.label :acceptance_at,class: 'col-form-label'%>
+       </div>
+       <div class="col-sm-4 mb-3 mb-sm-0">
+          <%= f.text_field :acceptance_at, class: 'form-control flatpickr validate[required]' ,placeholder:"拟验收时间" %>
+       </div>
+       <div class="col-sm-2 font-weight-bold  py-2 text-right">
+         资金来源
+       </div>
+       <div class="col-sm-4 mb-3 mb-sm-0">
+          <%= @project.capital_origin %>
+       </div>
+    </div>
+
+    <%= hidden_field_tag :old_password %>
+    <%= hidden_field_tag :back_url, params[:back] || admin_projects_path  %>
+    <div class="w-75 p-3 mx-auto text-center">
+      <%= link_to_void '提交', class: "btn btn-primary ",id: 'submit_certificate' %>
+      <%= link_to_back url: params[:back] || admin_projects_path  %>
+    </div>
+<%end%>
+
+<script type="text/javascript">
+  $(function(){
+    // 时间插件
+    flatpickr(".flatpickr");
+    // select2 tag
+    $(".select2_tags").select2({tags: true});
+
+    $("#submit_certificate").click(function(event) {
+      if(!$("#edit_certificate_form").validationEngine("validate")){
+        console.log('form  error')
+        return;
+       }
+      var d = dialog({
+        title: '在线签名',
+        content: "<%= j(render partial: 'validate_password')  %>",
+        okValue: '确定',
+          ok: function () {
+            if(!$("#password").val()){
+              alert('请输入当前密码进行验证')
+            }else{
+              $("#old_password").val($("#password").val());
+              var form = document.querySelector('#edit_certificate_form');
+              Rails.fire(form, 'submit');
+              $(".ui-dialog-button button[i-id=ok]").attr("disabled",true);
+            } 
+            return false
+          },
+          cancelValue: '取消',
+          cancel: function () {}
+      });
+      d.showModal();
+    });
+  })
+
+</script>

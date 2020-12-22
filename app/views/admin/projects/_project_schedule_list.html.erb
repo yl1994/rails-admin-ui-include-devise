@@ -1,0 +1,40 @@
+<table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+  <thead>
+    <tr>
+      <th class="w80">序号</th>
+      <th class="100">操作人</th>
+      <th class="w120">进度</th> 
+      <th>调整时间时间</th> 
+      <th class="w400">备注说明</th> 
+      <th class="w300">项目资料</th> 
+    </tr>
+  </thead>
+  <tbody>
+    <% @project_schedules.each_with_index do |project_schedule, index| %>
+        <tr>
+          <td class="text-center"><%= show_index(index)%></td>
+          <td class="text-left" >
+            <%= project_schedule.user&.realname %>
+          </td>
+          <td >
+            <div class="progress">
+              <div class="progress-bar bg-success " role="progressbar" style="width:<%=  project_schedule.progress %>%;" aria-valuenow="<%=  project_schedule.progress %>" aria-valuemin="<%=  project_schedule.progress %>" aria-valuemax="100"><%= project_schedule.progress %>%</div>
+            </div>
+          </td>
+          <td class="text-left" >
+           <%= project_schedule.schedule_at&.strftime('%Y-%m-%d') %>
+          </td>
+          <td>
+           <%= project_schedule.remark %>
+          </td>
+          <td>
+            <% project_schedule.files.attached? && project_schedule.files.each do |file| %>
+              <div>
+                <%= link_to_blank file.filename, file.service_url %>
+              </div>
+            <% end %>
+          </td>
+        </tr>
+      <% end -%>
+  </tbody>
+</table>

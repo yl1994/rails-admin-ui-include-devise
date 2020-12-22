@@ -1,0 +1,18 @@
+domain: http://localhost:3000
+mysql:
+  username: 'root'
+  password: '123456'
+  database: 'tz_project'
+minio:
+   username: ''
+   password: ''
+   bucket: ''
+   host: ''
+   force_path_style: true
+gaode:
+  web:
+    key: "cae0884f8a4a67a78625d748a0be13a7"
+  api: 
+    key: "c81b05ea0f548c2533fdb03a0b632db4"
+
+

@@ -1,0 +1,11 @@
+<!-- 
+   examople 
+   <%#= render 'admin/shared/search_buttons',total_num:  @query.result.count %>
+-->
+<div class="col-auto">
+  <button class="btn btn-primary btn-sm"  style="float: none" type="submit">查 询</button>
+  <button class="btn btn-outline-dark btn-sm"  style="float: none" onclick='window.location.href=$(".form-search").attr("action")+"?back=<%= params[:back] %>"; return false;'>全部</button>
+  <% if total_num %>
+    <span class="search_total">总共：<%= total_num %>条</span>
+  <% end %>
+</div>

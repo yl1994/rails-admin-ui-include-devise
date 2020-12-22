@@ -1,0 +1,33 @@
+<div class="login_wrap clearfix">
+    <div class="login_list">
+          <%= form_for(resource, as: resource_name, url: session_path(resource_name),html:{class: 'login_form'}) do |f| %>
+            <div class="login-type-wrap">
+                账号登录
+            </div>
+
+            <div class="login-main-wrap">
+                <div class="item clearfix">
+                    <div class="item-icon item-people"></div>
+                    <%= f.text_field :username, autofocus: true, autocomplete: "email",class: 'base_input fl',"aria-describedby": "emailHelp", placeholder: "用户名或手机号" %>
+                </div>
+                <div class="item clearfix">
+                    <div class="item-icon item-pass"></div>
+                    <%= f.password_field :password, autocomplete: "current-password",class: "base_input fl",placeholder:"密码"  %>
+                </div>
+                <div class="remember clearfix">
+                    <%= f.check_box :remember_me,class: 'checkbox fl',id: "customCheck" %>记住我
+                </div>
+                <%= f.submit "登录",class: "login_btn"  %>
+            </div>
+        <% end %>
+    </div>
+</div>
+<div class="login_notice">
+    <div class="login_box">
+        <div class="login_notice_bg"></div>
+        <a class="login_notice_wrap" href="/web/notices">
+            <i class="login_notice_icon"></i>
+            <label>公告信息</label>
+        </a>
+    </div>
+</div>

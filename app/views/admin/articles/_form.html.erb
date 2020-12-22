@@ -1,0 +1,49 @@
+<%= form_for [:admin, @article], :html => {:multipart => true, :class => "valid_engine"}  do |f| -%>
+  <div class="w-75 mx-auto mt15">
+    <div class="row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= require_span %><%= f.label :title,class: 'col-form-label'%></div>
+      <div class="col-8"><%= f.text_field :title, autofocus: true, autocomplete: "title",class: "form-control form-control-user validate[required]",placeholder:"标题" %></div>
+    </div>
+    <div class=" pt-3 row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= f.label :published,class: 'col-form-label'%></div>
+      <div class="col-8"><%= f.check_box :published,placeholder:"发布" %></div>
+    </div>
+    <div class=" pt-3 row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= f.label :position,class: 'col-form-label'%></div>
+      <div class="col-8"><%= f.text_field :position,placeholder:"位置" %></div>
+    </div>
+    <div class=" pt-3 row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= f.label :category,class: 'col-form-label' %></div>
+      <div class="col-8"><%= f.select :category_id, ArticleCategory.pluck(:name,:id),{include_blank: '请选择'},class: 'custom-select validate[required]'%></div>
+    </div>
+    <div class=" pt-3 row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= require_span %><%= f.label :content,class: 'col-form-label' %></div>
+      <div class="col-8">
+         <%= f.text_field :content,placeholder:"内容",class: "validate[required] mytextarea"  %>
+       <%#= f.text_field :content,placeholder:"内容",class: "form-control form-control-user mceEditor validate[required]"  %>
+       </div>
+    </div>
+    <div class=" pt-3 row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= f.label :file,class: 'col-form-label' %></div>
+      <div class="col-8">
+        <% if @article.file.attached? %>
+          <% if %w(jpg JPG jpeg JPEG gif GIF png PNG).include?(@article.file.blob.filename.to_s.split(".")[1])%>
+            <%= image_tag(url_for(@article.file), class: "fl", style: "width: 50px; height: 50px;display: block")  %>
+          <% else %>
+            <%= link_to @article.file.blob.filename.to_s, url_for(@article.file), class: "fl"%>
+          <% end %>
+          <%= f.file_field :file, class: "fl"%>
+        <% else %>
+          <%= f.file_field :file, class: "form-control"%>
+        <% end %>  
+         
+       </div>
+    </div>
+  </div>
+
+  <div class="w-75 p-3 mx-auto text-center">
+    <%= f.submit '提交', class: "btn btn-primary" %>
+    <%= link_to_back url: params[:back] || admin_articles_path(@article) %>
+  </div>
+
+<% end -%>

@@ -1,0 +1,17 @@
+var d = dialog({
+  id: 'edit_project_info',
+  title: '修改资料',
+  width: 800,
+  height: 450,
+  content: "<%= j(render partial: 'project_info_form')  %>",
+  okValue: '确定',
+    ok: function () {
+      this.title('提交中…');
+      var form = document.querySelector('#project_info_form');
+      Rails.fire(form, 'submit');
+      return false
+    },
+    cancelValue: '取消',
+    cancel: function () {}
+});
+d.showModal();

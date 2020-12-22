@@ -1,0 +1,249 @@
+@import 'bootstrap/dist/css/bootstrap.min';
+$fa-font-path: '~@fortawesome/fontawesome-free/webfonts';
+@import '~@fortawesome/fontawesome-free/scss/fontawesome';
+@import '~@fortawesome/fontawesome-free/scss/regular';
+@import '~@fortawesome/fontawesome-free/scss/solid';
+@import "./shared/validationEngine";
+@import "./shared/ztree";
+@import "common";
+@import "startbootstrap-sb-admin-2/css/sb-admin-2.min";
+@import 'toastr/toastr';
+@import 'art-dialog/css/dialog';
+@import 'select2';
+@import 'flatpickr';
+@import 'bootstrap-slider';
+@import 'bootstrap-fileinput/css/fileinput';
+@import 'bootstrap-fileinput/themes/explorer-fas/theme.min.css';
+@import 'bootstrap-table/dist/bootstrap-table.min';
+@import 'bootstrap-table/dist/extensions/fixed-columns/bootstrap-table-fixed-columns.min';
+@import '@ttskch/select2-bootstrap4-theme/dist/select2-bootstrap4.min';
+
+html,
+#wrapper {
+  height: 100%;
+}
+
+.card-body {
+  min-height: 500px;
+  .table-responsive {
+    min-height: 500px;
+  }
+}
+
+
+
+
+.slider-selection {
+  background: #84dc83;
+}
+
+.slider-handle {
+  background: green;
+}
+
+.bd-callout-info {
+    border-left-color: #5bc0de !important;
+}
+
+.bd-callout {
+    padding: 0.75rem;
+    margin-top: 0.25rem;
+    margin-bottom: 0.25rem;
+    border: 2px solid #eee;
+    border-left-width: .25rem;
+    border-radius: .25rem;
+}
+
+.progress-bar-zero {
+  background-color: #e9ecef !important;
+}
+
+.progress-bar-default {
+  position: absolute;
+  left: calc(23%); 
+}
+
+.form-inline label {
+  display: initial !important;
+}
+
+.edit_project {
+  position: relative;
+  bottom: 28px;
+}
+input[type=file][data-direct-upload-url][disabled] {
+  display: none;
+}
+
+.map #container {
+    width: 700px;
+    height: 300px;
+    margin: 0px;
+    font-size: 13px;
+}
+
+.map #pickerInput {
+    width: 200px;
+    padding: 5px 5px;
+}
+
+.map #poiInfo {
+    background: #fff;
+}
+
+.amap_lib_placeSearch .poibox.highlight {
+    background-color: #CAE1FF;
+}
+
+.amap_lib_placeSearch .poi-more {
+    display: none!important;
+}
+.font16 { font-size: 16px; }
+
+.ht_table{
+    width:100%;
+    border:1px solid #ccc;
+}
+.ht_table th{
+    padding: 10px 4px;
+    border-bottom: 1px solid #ccc;
+    background-color: #f5f5f5;
+    width:220px;
+    border-right:1px solid #ccc;
+}
+.ht_table td{
+  padding: 10px 8px;
+  border-bottom: 1px solid #ccc;
+}
+.border_top0{
+  border-top:0;
+}
+.font_weight_normal{
+  font-weight: normal;
+}
+.notice_container{
+  float: right;
+  width: 968px;
+  border: 1px solid #dedede;
+  .nes_details{
+    width: 912px;
+    clear: both;
+    word-wrap: break-word;
+    word-break: break-all;
+    overflow: hidden;
+    padding: 0 28px;
+    h2{
+      width: 100%;
+      padding-top: 25px;
+      font-size:24px;
+    }
+    .time{
+      border-bottom: 0;
+    }
+  }
+}
+.border-b{
+  border-bottom:1px solid #b1adad;
+}
+.border-r{
+   border-right:1px solid #b1adad;
+}
+.w85{
+  width:85px;
+}
+.nes_details_h2 {
+    width: 100%;
+    padding-top: 25px;
+    font-size: 24px;
+    line-height: 40px;
+    text-align: center;
+    font-weight: normal;
+    color: #5e5e5e;
+}
+.nes_details_time{
+    color: #a2a2a2;
+    text-align: center;
+    padding-bottom: 10px;
+    font-weight:bold;
+}
+.head-border{
+      border: 1px solid #b1adad !important;
+}
+.font14{
+  font-size:14px;
+}
+.mb29{
+  margin-bottom:29px;
+}
+.mt29{
+  margin-top:29px;
+}
+.mb20{
+  margin-bottom:20px;
+}
+.mb11{
+  margin-bottom:11px;
+}
+.mt15{
+  margin-top:15px;
+}
+.ml60{
+  margin-left:60px;
+}
+.py-10{
+  padding:10px 0;
+}
+.pl-30{
+  padding-left:30px;
+}
+.w120{
+  width:120px;
+}
+
+.cgr_ar {
+    text-align: left;
+    text-indent: 37px;
+    font-family: "Microsoft YaHei";
+    color:#5e5e5e;
+}
+.nes_details_p {
+    font-size: 14px;
+    font-family: 宋体;
+    line-height: 24px;
+    padding-top: 10px;
+    text-indent: 28px;
+    padding: 10px 10px 0 10px;
+    margin-bottom:0;
+}
+.cgr_ar_content{
+    font-size: 16px;
+    color: #5e5e5e;
+    line-height: 22px;
+}
+.cgr_ar_name{
+  color: #4987db;
+}
+.fjpg{
+  width: 30px;
+  height: 24px;
+  background: url("../img/added.PNG");
+  background-position: 0 0 ;
+  display: inline-block;
+  vertical-align: middle;
+}
+.fdoc{
+  width: 20px;
+  height: 24px;
+  background: url("../img/added.PNG");
+  background-position: -40px 0 ;
+  display: inline-block;
+  vertical-align: middle;
+}
+.fzip{
+  width: 24px;
+  height: 24px;
+  background: url("../img/added.PNG");
+  background-position: -65px 0 ;
+  display: inline-block;
+  vertical-align: middle;
+}

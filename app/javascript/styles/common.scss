@@ -1,0 +1,128 @@
+// 去掉select自带的下拉箭头
+.custom-select,
+.custom-select-fixed-width {
+    -webkit-appearance: none;
+}
+
+// 下拉框样式,宽度自己设定
+.custom-select-fixed-width {
+    transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.custom-select-fixed-width {
+    display: inline-block;
+    height: calc(1.5em + 0.75rem + 2px);
+    padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #6e707e;
+    vertical-align: middle;
+    background: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'%3e%3cpath fill='%235a5c69' d='M2 0L0 2h4zm0 5L0 3h4z'/%3e%3c/svg%3e") no-repeat right 0.75rem center/8px 10px;
+    background-color: #fff;
+    border: 1px solid #d1d3e2;
+    border-radius: 0.35rem;
+    appearance: none;
+}
+
+// 修改bootsrap 表格上下居中
+.table th,
+td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+// 批量生成10 - 1000 步长为10的宽度
+$i: 1;
+$step: 10;
+@while $i <=100 {
+    .w#{$i*$step} {
+        width: 1px * $step * $i !important;
+    }
+    $i: $i+1;
+}
+
+// 批量生成5 - 200 步长为5的martion-left
+$i: 1;
+$step: 5;
+@while $i <=40 {
+    .mt#{$i*$step} {
+        margin-top: 1px * $step * $i;
+    }
+    $i: $i+1;
+}
+
+// 批量生成5 - 200 步长为5的 martion-left
+$i: 1;
+$step: 5;
+@while $i <=40 {
+    .ml#{$i*$step} {
+        margin-left: 1px * $step * $i;
+    }
+    $i: $i+1;
+}
+
+// 批量生成5 - 200 步长为5的 martion-right
+$i: 1;
+$step: 5;
+@while $i <=40 {
+    .mr#{$i*$step} {
+        margin-left: 1px * $step * $i;
+    }
+    $i: $i+1;
+}
+
+// 批量生成5 - 200 步长为5的 martion-bottom
+$i: 1;
+$step: 5;
+@while $i <=40 {
+    .mb#{$i*$step} {
+        margin-left: 1px * $step * $i;
+    }
+    $i: $i+1;
+}
+
+// 批量生成字体大小 font-size
+
+$i: 10;
+$step: 1;
+@while $i <=36 {
+    .font#{$i*$step} {
+        font-size: 1px * $step * $i;
+    }
+    $i: $i+1;
+}
+
+// 批量生成5 - 200 步长为5的 padding
+
+$i: 1;
+$step: 5;
+@while $i <=40 {
+    .pd#{$i*$step} {
+         padding: 1px * $step * $i;
+    }
+    $i: $i+1;
+}
+
+// 通用表单查询
+.search_total {
+    line-height: 31px;
+    font-size: 0.875rem;
+}
+
+.form-search {
+    padding-left: 1.25rem;
+}
+
+.navbar-custom-menu>.navbar-nav>li {
+    position: relative;
+}
+
+.navbar-nav>li {
+    float: left;
+}
+
+.nav>li {
+    position: relative;
+    display: block;
+}

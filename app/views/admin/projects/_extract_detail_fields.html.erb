@@ -1,0 +1,196 @@
+
+<div class="mx-auto nested_form" >
+  <div class="form-group row justify-content-start align-items-center">
+  	<div class="col-sm-2">
+  	 <%= f.select :major_category_id, MajorCategory.pluck(:name,:id),{include_blank: true},{class: ' select2 custom-select-fixed-width major_category w-100 validate[required] ',data: {placeholder: '请选择专家类别'}} %>
+  	</div>
+  	<div class="col-sm-3" >
+  	<%= f.select :major_ids, [], {} ,{class: "select2 w230 major_select validate[required] ",multiple: true,data: {placeholder: "请选择专家专业"}} %>
+  	</div>
+  	<div class="col-sm-3">
+  	  <%= f.select :is_department, [["是", 1], ["否",0],["随机", 2]],{include_blank: '请选择是否本单位'},{class: 'select2_tags custom-select validate[required] is_department'}  %>
+  	</div>
+  	
+  	<div class="col-sm-2">
+  	  <%= f.text_field :experts_number, autofocus: true, autocomplete: "experts_number",class: 'form-control validate[required,min[1],custom[integer]]] major_num' ,disabled: true,placeholder:"专家数量" %>
+      <%= f.hidden_field :experts_ids,class: 'experts_ids'%>
+  	</div>
+  	<div class="col-sm-2 ">
+  	  <%= f.hidden_field :_destroy %>
+  	  <%= link_to_remove_fields '移除',class: 'w100 ml10 btn btn-danger btn-sm text-white delete_user_form'%>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(function() {
+    // select2 初始化
+    $('.select2').select2({
+      theme: 'bootstrap4',
+       language: {
+          noResults: function(params) {
+              return "暂无数据";
+          }
+     }
+    });
+
+    $(".major_select").on("select2:select", function (evt) {
+      if(evt.params.data.id == 'none'){
+        $(this).find("option[value!='none']").attr("disabled",true);
+        $(this).val(['none']).trigger('change');
+     
+      }
+     
+     });
+
+    $(".major_select").on("select2:unselect", function (evt) {
+       if(evt.params.data.id == 'none'){
+        $(this).find('option').attr("disabled",false);
+       }
+     });
+
+    $('.total_num').change(function(event) {
+      toggleAdd()
+      var total_num = parseInt($('.total_num').val());
+      var sum = 0;
+      $('.major_num:visible').each(function(i,e){
+          sum += parseFloat($(e).val() || 0 )
+      })
+      if(total_num < sum){
+        $('.major_num:visible').each(function(i,e){
+          $(e).val('')
+        })
+      }
+    });
+    // 删除事件
+    $('.delete_user_form').click(function(event) {
+      /* Act on the event */
+      toggleAdd(true)
+    });
+    
+    // 专家数量获取焦点清空已抽取的专家
+    $(".major_num").focus(function(){
+      $(this).parents(".nested_form").find('.experts_ids').val('');
+    })
+    
+    // 专家数量失去焦点 抽取专家
+    $('.major_num').unbind('blur').bind('blur', function(){
+      var total_num = $('.total_num').val();
+      var major_num =$ (this).val();
+      var sum = 0;
+      error_flag = false
+      $('.major_num:visible').each(function(i,e){
+          sum += parseFloat($(e).val() || 0 )
+          if (sum > total_num) {
+            toastr['error']('已超出抽取专家总数！请重新输入!',"<%= notice_tip('error') %>");
+            $(".ui-dialog-button button[i-id=ok]").attr('disabled',false).text("确定");
+            error_flag = true;
+            $(e).val('');
+            return false;
+          }
+      })
+      if(error_flag){
+        return false
+      }
+      var $this = $(this);
+       var major_num = $(this).val();
+       var major_category_id = $(this).parents(".nested_form").find('.major_category').val();
+       var major_ids = $(this).parents(".nested_form").find('.major_select').val();
+       var department = $(this).parents(".nested_form").find('.is_department').val();
+       var experts_ids = $('.nested_form:visible').find(".experts_ids").not(this).map(function(i,e){if($(e).val()){return $(e).val()}}).toArray().join(',')
+       var that = this
+       $.ajax({
+         url: '/admin/projects/extract',
+         data: {
+           nums: major_num,
+           id: "<%= @project.id %>",
+           major_category_id: major_category_id,
+           major_ids: major_ids,
+           pass_sample_expert_ids: experts_ids,
+           is_department: department 
+         },
+         context: 'json',
+         type: 'GET',
+        success: function(data){
+          if (data.success) {
+            var experts_ids = data.experts
+            $(that).parents(".nested_form").find('.experts_ids').val(experts_ids)
+            toggleAdd()
+          }else {
+              $this.val('');
+              toastr['error'](data.msg,"<%= notice_tip('error') %>")
+              $(".ui-dialog-button button[i-id=ok]").attr('disabled',false).text("确定");
+          }
+        }
+      })
+    });
+
+    // 选择是否本单位控制专家数量的启用禁用
+    $(".is_department").change(function(){
+      $(this).parents(".nested_form").find('.major_num').val('');
+      if ($(this).val() && $(this).parents(".nested_form").find(".major_category").val()) {
+          $(this).parents(".nested_form").find('.major_num').attr('disabled', false);
+      } else {
+        $(this).parents(".nested_form").find('.major_num').attr('disabled', true);
+      }
+  
+    });
+
+    // 选择专家大类获取专家专业
+    $(".major_category").change(function(){
+      $(this).parents(".nested_form").find('.major_num').val(''); 
+      var data= $(this).parents(".nested_form").find('.major_select').select2({ 
+        theme: 'bootstrap4',
+        language: {
+           noResults: function(params) {
+               return "暂无数据";
+           }
+        }
+      });//获取selectid
+      data.val('').trigger("change");
+      if ($(this).val() && $(this).parents(".nested_form").find(".is_department").val()) {
+          $(this).parents(".nested_form").find('.major_num').attr('disabled', false);
+      } else {
+        $(this).parents(".nested_form").find('.major_num').attr('disabled', true);
+      }
+       var major_category_id = $(this).val();
+       var that = this
+       $.ajax({
+         url: '/admin/projects/get_category_id?major_category_id='+ major_category_id,
+         context: 'json',
+         type: 'GET',
+        success: function(data){
+          if (data.success) {
+            var str =""
+            $.each(data.majors,function(i,v){
+            str += "<option value='" + v[1]+ "'>" +v[0]+ "</option>"  
+            });
+            $(that).parents(".nested_form").find('.major_select').html(str)
+          }else { 
+            $(that).parents(".nested_form").find('.major_select').html('')
+            console.log("未找到该大类下的专家专业");
+          }
+        }
+      });
+    })
+    // 选择专家
+    $('.major_select').change(function(event) {
+      $(this).parents(".nested_form").find('.major_num').val('');
+    });
+})
+
+function toggleAdd(flag){
+  if(flag){
+    return $(".add_major_form").show();
+  }
+  var total_num = parseInt($('.total_num').val());
+  var sum = 0;
+  $('.major_num:visible').each(function(i,e){
+      sum += parseFloat($(e).val() || 0 )
+  })
+  if(sum >= total_num){
+    $(".add_major_form").hide();
+  }else{
+    $(".add_major_form").show();
+  }
+}
+</script>

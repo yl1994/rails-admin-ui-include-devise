@@ -1,0 +1,58 @@
+<div class="mt-4">
+  <%= form_for @query, :url => admin_articles_path, :html => {:method => :get, :class => "well form-search form-inline"}  do |f| %>
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label>标题：</label>
+        <%= f.text_field :title_cont,class: 'form-control ',placeholder: "标题" %>
+      </div>
+      <div class="col-auto">
+        <label>文章分类：</label>
+        <%= f.select :category_id_eq,ArticleCategory.all.map{|x| [x.name, x.id] }, {include_blank: '不限'},{class: 'custom-select-fixed-width'}  %>
+      </div>
+      <div class="col-auto">
+        <label>发布状态：</label>
+        <%= f.select :published_eq,options_for_select([["是", 1], ["否",0]]), {include_blank: '不限'},{class: 'custom-select-fixed-width'} %>
+      </div>
+      <%= render 'admin/shared/search_buttons',total_num:  @query.result.count %>
+    </div>
+  <% end %>
+</div>
+
+
+<div class="card-body">
+  <div class="page-header">
+    <%= link_to '新增文章',new_admin_article_path,class: 'btn btn-primary btn-sm ' if can? :new,Article  %>
+  </div>
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="w80">序号</th>
+          <th class="w100">标题</th>
+          <th class="w100">文章分类</th>
+          <th class="w100">已发布</th>
+          <th class="w100">发布时间</th>
+          <th class="w100">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @articles.each_with_index do |article, index| -%>
+          <tr id="<%= article.id %>">
+            <td class="textc"><%= index + 1 %></td>
+            <td><%= article.title%></td>
+            <td><%= article.try(:category).try(:name) %></td>
+            <td><%= article.published ? "是" : "否" %></td>
+            <td><%= article.published_at&.strftime("%Y-%m-%d")%></td>
+            <td class="textc">
+              <% show_link = link_to '查看', admin_article_path(article, :back => request.fullpath) if can? :show,article %>
+              <% edit_link = link_to '修改', edit_admin_article_path(article, :back => request.fullpath) if can? :edit,article%>
+              <% destroy_link = link_to '删除', admin_article_path(article, :back => request.fullpath), :method => :delete, data: { confirm: '确认要刪除吗?' } if can? :destroy,article %>
+              <%= operate_buttons([show_link,edit_link, destroy_link].compact) %>
+            </td>
+          </tr>
+        <% end -%>        
+      </tbody>
+    </table>
+    <%= paginate @articles %>
+  </div>
+</div>

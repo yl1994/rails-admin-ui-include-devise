@@ -1,0 +1,10 @@
+var d = dialog({
+  id: 'accept',
+  title: '验收详情',
+  width: 800,
+  height: 510,
+  content: "<%= j(render partial: 'admin/projects/completion/show_accept')  %>",
+  cancelValue: '关闭',
+  cancel: function () {}
+});
+d.showModal();

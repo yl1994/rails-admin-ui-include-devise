@@ -1,0 +1,20 @@
+var d = dialog({
+  title: '项目进度',
+  width: 800,
+  height: 560,
+  content: "<%= j(render partial: 'project_schedule_form')  %>",
+  okValue: '确定',
+    ok: function () {
+      if(!$("#project_schedule_form").validationEngine("validate")){
+        console.log('form  error')
+        return false;
+       }
+      $(".ui-dialog-button button[i-id=ok]").attr("disabled",true);
+      var form = document.querySelector('#project_schedule_form');
+      Rails.fire(form, 'submit');
+      return false
+    },
+    cancelValue: '取消',
+    cancel: function () {}
+});
+d.showModal();

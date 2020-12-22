@@ -1,0 +1,192 @@
+@import "style";
+@import 'toastr/toastr';
+.clearfix {
+  clear: both;
+  content: ''; }
+
+.fl {
+  float: left; }
+
+body {
+  font-family: "Microsoft YaHei"; }
+
+.login_head {
+  width: 100%;
+  min-width: 1300px;
+  height: 163px;
+  line-height: 163px; }
+  .login_head .head_mid_login {
+    width: 1200px;
+    margin: 0 auto; }
+    .login_head .head_mid_login a {
+      display: block;
+      width: 440px;
+      height: 50px; }
+      .login_head .head_mid_login a .login_img {
+        width: 100%;
+        height: 100%; }
+
+.login_main {
+  width: 100%;
+  min-width: 1300px;
+  height: 578px;
+  background: url("../img/login_bg.jpg") no-repeat center center;
+  position: relative; }
+  .login_main .login_wrap {
+    width: 1200px;
+    margin: 0 auto; }
+  .login_main .login_list {
+    width: 340px;
+    background-color: #fff;
+    margin-top: 112px;
+    float: right; }
+    .login_main .login_list .login-type-wrap {
+      width: 100%;
+      height: 59px;
+      line-height: 60px;
+      border-bottom: 1px solid #d9d9d9;
+      text-align: center;
+      font-size: 20px;
+      color: #187bfd; }
+    .login_main .login_list .login-main-wrap {
+      padding: 2px 20px 0 20px; }
+      .login_main .login_list .login-main-wrap .item {
+        margin-top: 18px;
+        border: 1px solid #d9d9d9;
+        height: 38px;
+        line-height: 38px; }
+        .login_main .login_list .login-main-wrap .item .item-icon {
+          float: left;
+          width: 16px;
+          height: 20px;
+          background: url("../img/user-pass-icon.png");
+          margin-left: 11px;
+          margin-top: 9px;
+          margin-right: 11px; }
+        .login_main .login_list .login-main-wrap .item .item-people {
+          background-position: 0 20px; }
+        .login_main .login_list .login-main-wrap .item .item-pass {
+          background-position: -16px 20px; }
+        .login_main .login_list .login-main-wrap .item .base_input {
+          width: 260px;
+          border: 0;
+          border-radius: 0;
+          font-size: 14px;
+          height: 38px;
+          display: block;
+          font-family: "Microsoft YaHei"; }
+      .login_main .login_list .login-main-wrap .remember {
+        margin: 25px 0;
+        height: 18px;
+        line-height: 18px;
+        font-size: 14px;
+        color: #959595; }
+        .login_main .login_list .login-main-wrap .remember .checkbox {
+          width: 18px;
+          height: 18px;
+          border: 1px solid #d9d9d9;
+          display: block;
+          margin-right: 8px; }
+      .login_main .login_list .login-main-wrap .login_btn {
+        margin-bottom: 32px;
+        height: 42px;
+        line-height: 42px;
+        border: 0;
+        border-radius: 0;
+        background-color: #187bfd;
+        color: #fff;
+        font-weight: bold;
+        font-size: 18px;
+        width: 100%;
+        display: block;
+        font-family: "Microsoft YaHei"; }
+  .login_main .login_notice {
+    position: absolute;
+    right: 0;
+    bottom: 50px;
+    width: 72px;
+    height: 194px; }
+    .login_main .login_notice .login_box {
+      position: relative;
+      width: 100%;
+      height: 100%; }
+    .login_main .login_notice .login_notice_bg {
+      width: 68px;
+      height: 190px;
+      background-color: rgba(255, 255, 255, 0.8);
+      position: absolute;
+      bottom: 0;
+      left: 0; }
+    .login_main .login_notice .login_notice_wrap {
+      background-color: #fff;
+      width: 68px;
+      height: 190px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      position: absolute;
+      top: 0;
+      right: 0; }
+      .login_main .login_notice .login_notice_wrap .login_notice_icon {
+        display: block;
+        width: 30px;
+        height: 30px;
+        background: url("../img/login_icon.png");
+        background-position: -71px 0;
+        margin-bottom: 14px; }
+      .login_main .login_notice .login_notice_wrap label {
+        color: #f16609;
+        font-size: 24px;
+        width: 24px;
+        display: block;
+        letter-spacing: 7px; }
+
+.login_footer {
+  height: 178px;
+  width: 100%;
+  min-width: 1300px;
+  font-size: 14px; }
+  .login_footer .footer_top {
+    width: 1200px;
+    margin: 0 auto;
+    height: 82px;
+    line-height: 82px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #d3d3d3; }
+    .login_footer .footer_top li {
+      color: #959595;
+      display: flex;
+      align-items: center; }
+      .login_footer .footer_top li .location {
+        width: 16px;
+        height: 20px;
+        background: url(../img/login_icon.png) no-repeat;
+        background-position: 0px -5px;
+        margin-right: 9px;
+        display: block; }
+      .login_footer .footer_top li .tel {
+        width: 20px;
+        height: 16px;
+        background: url(../img/login_icon.png) no-repeat;
+        background-position: -21px -5px;
+        display: block;
+        margin-right: 6px; }
+      .login_footer .footer_top li .time {
+        width: 20px;
+        height: 20px;
+        background: url(../img/login_icon.png) no-repeat;
+        background-position: -46px -5px;
+        display: block;
+        margin-right: 6px; }
+  .login_footer .footer_bottom {
+    text-align: center;
+    width: 1200px;
+    margin: 0 auto;
+    height: 63px;
+    line-height: 63px;
+    color: #939393; }
+    .login_footer .footer_bottom a {
+      color: #939393; }

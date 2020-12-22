@@ -1,0 +1,23 @@
+<div class="card-header py-3">
+  <h6 class="m-0 font-weight-bold text-primary">项目详情 <%= link_to_back url: params[:back] || admin_projects_path  %> </h6>
+</div>
+<div class="card-body">
+  <div id="basic_info">
+    <%= render 'form_readonly'%>
+  </div>
+  <div id="file_info" class="ml20">
+    <%#= render "file_form",file_types: @file_types %>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).on('click', '.file_type_root', function(event) {
+  var $this = $(this);
+  if ($this.parent().next('.file_types').attr("class").indexOf('show') == -1) {
+    $this.parent().next('.file_types').addClass('show');
+  } else {
+    $this.parent().next('.file_types').removeClass('show');
+  }
+
+});
+
+</script>

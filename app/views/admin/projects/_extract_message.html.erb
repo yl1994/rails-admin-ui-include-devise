@@ -1,0 +1,138 @@
+
+<div class="table-responsive mt-4">
+  <div class="bd-callout bd-callout-info">
+     <h6 class="m-0 font-weight-bold text-primary" data-toggle="collapse">抽取专家条件</h6>
+  </div>
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+       <thead>
+            <tr>
+              <th class="w100">专家类别</th>
+              <th class="w150">专家专业</th>
+              <th class="w150">是否本单位</th>
+              <th class="w100">专家数量</th>
+              <th class="w100">剩余可抽数量</th>
+            </tr>
+        </thead>
+        <tbody>
+           <%  extract_record.extract_details.includes(:project).each do |detail| %>
+          <tr>
+            <td>
+                <%= detail.major_category_name %>
+            </td>
+            <td>
+              <%= detail.major_name.join('、').presence || '不限' %>
+            </td>
+            <td>
+                <%= ExtractDetail::ISDEPARTMENT[detail.is_department] %>
+            </td>
+            <td>
+                <%= detail.experts_number %>
+            </td>
+            <td>
+                <%= detail.query_experts(nil,true,true) %>
+            </td>
+          </tr>
+          <% end -%>
+        </tbody>
+    </table>
+  <div class="bd-callout bd-callout-info">
+     <h6 class="m-0 font-weight-bold text-primary" data-toggle="collapse">抽取专家明细</h6>
+  </div>
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+       <thead>
+            <tr>
+                <th class="w80">序号</th>
+                <th class="w100">专家类别</th>
+                <th class="w150">单位名称</th>
+                <th class="w100">姓名</th>
+                <th class="w100">电话</th>
+                <th class="w150">专家专业</th>
+                <th class="w150">是否本单位</th>
+                <th class="w100">抽取轮次</th>
+                <th class="w100">是否参与</th>
+                <th class="w180">操作</th>
+            </tr>
+        </thead>
+          <tbody>
+              <% extract_experts.each_with_index do |expert, index| -%>
+              <tr id="expert_<%= expert.id %>">
+                  <td class="textc">
+                      <%= index + 1 %>
+                  </td>
+                  <td>
+                      <%= expert.major_category_name %>
+                  </td>
+                  <td>
+                      <%= expert.department_name %>
+                  </td>
+                  <td>
+                      <%= expert.expert_name %>
+                  </td>
+                  <td>
+                      <%= expert.expert_phone %>
+                  </td>
+                  <td>
+                    <%=  expert.expert_major_name %>
+                  </td>
+                  <td>
+                      <%= expert.is_department ? "是" : "否" %>
+                  </td>
+                  <td>
+                      <%= expert.turn %>
+                  </td>
+                  <td>
+                      <%= ExtractExpert::JOIN[expert.is_join] %>
+                  </td>
+                  <td>
+                    <% if expert.is_join == 2 %>
+                      <%= expert.reason %>
+                    <% else %>
+                      <%= link_to '参与', is_join_admin_projects_path(expert,type: "sure",expert_id: expert.id), class: 'btn btn-success btn-sm',remote: true if expert.is_join == 0 %>
+                      <%= link_to_void '不参与', url:is_join_admin_projects_path(expert,type: "insure",expert_id: expert.id), class: 'btn btn-danger ml5 btn-sm unjoin',expert_id: expert.id, type: 'insure' if expert.is_join == 0 %>
+                    <% end %>
+                  </td>
+              </tr>
+              <% end -%>
+          </tbody>
+    </table>
+</div>
+
+<div>
+  <%= link_to '不参与专家重新抽取', extract_again_admin_projects_path(extract_experts,type: "again",extract_record_id: extract_record.id), class: 'btn btn-success btn-sm extract_again',remote: true, style: 'disaply:none;' if extract_record.is_full == 2 %>
+</div>
+
+<script type="text/javascript">
+$(function(){
+  $(".unjoin").click(function(event) {
+      if(!$("#unjoin_from").validationEngine("validate")){
+        console.log('form  error')
+        return;
+       }
+      var url = $(this).attr('url');
+      var expert_id = $(this).attr('expert_id');
+      var type = $(this).attr('type');
+      var d = dialog({
+        id: 'unjoin_dialog',
+        title: '专家不参与理由',
+        content: "<%= j(render partial: 'unjoin_reason')  %>",
+        okValue: '确定',
+          ok: function () {
+            if(!$("#reason").val()){
+              alert('请输入专家不参与理由!')
+            }else{
+              $("#unjoin_from").attr('action',url)
+              $("#unjoin_from #expert_id").val(expert_id);
+              $("#unjoin_from #type").val(type);
+              var form = document.querySelector('#unjoin_from')
+              Rails.fire(form,'submit');
+              $(".ui-dialog-button button[i-id=ok]").attr("disabled",true);
+            } 
+            return false
+          },
+          cancelValue: '取消',
+          cancel: function () {}
+      });
+      d.showModal();
+    });
+  })
+</script>

@@ -1,0 +1,12 @@
+<%  reloadony ||= false %>
+<% file_type_hash = ProjectFileTypeCount.where(project_id: @project.id).inject({}){|h,pft| h.store(pft.file_type_id,pft.num);h} %>
+<% file_types.each do |file_type |%>
+  <div class="bd-callout bd-callout-info">
+    <h6 class="m-0 font-weight-bold text-primary file_type_root"  href="#file_type_<%= file_type.id %>" file_type_id="<%= file_type.id%>">
+      <%= file_type.name %>
+    </h6>
+  </div>
+  <div class="collapse show file_types" id="file_type_<%= file_type.id%>">
+    <%= render partial: 'admin/projects/file_type_child_form',locals: {file_type_childrens:  file_type.children,reloadony: reloadony,file_type_hash:file_type_hash  } %> 
+  </div>
+<% end %>

@@ -1,0 +1,43 @@
+<div class="card-header py-3">
+  <h6 class="m-0 font-weight-bold text-primary">抽取专家信息 <%= link_to_back url: params[:back] || extract_expert_index_admin_projects_path  %> </h6>
+</div>
+
+<div class="bd-callout bd-callout-info">
+     <h6 class="m-0 font-weight-bold text-primary" data-toggle="collapse">抽取专家明细</h6>
+  </div>
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+       <thead>
+            <tr>    
+                <th class="w80">序号</th>
+                <th class="w100">项目状态</th>
+                <th class="w150">应抽专家人数</th>
+                <th class="w100">确认参与人数</th>
+                <th class="w100">抽取时间</th>
+                <th class="w180">操作</th>
+            </tr>
+        </thead>
+          <tbody>
+              <% @extract_records.each_with_index do |record, index| -%>
+              <tr id="record_<%= record.id %>">
+                  <td class="textc">
+                      <%= index + 1 %>
+                  </td>
+                  <td>
+                      <%= OperationStatus::STATUS[record.project_status] %>
+                  </td>
+                  <td>
+                      <%= record.extract_number %>
+                  </td>
+                  <td>
+                      <%= record.extract_experts.is_join.size %>
+                  </td>
+                  <td>
+                      <%= record.created_at.strftime('%Y年%m月%d日') %>
+                  </td>
+                  <td>
+                      <%= link_to '查看', show_experts_list_admin_project_path(@project, extract_record_id: record.id),remote: true, class: 'btn btn-sm btn-success'%>
+              </tr>
+              <% end -%>
+          </tbody>
+    </table>
+</div>

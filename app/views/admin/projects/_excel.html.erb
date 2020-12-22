@@ -1,0 +1,120 @@
+<%#= form_for [:admin, @project || Project.new], remote: true ,html: {class: 'valid_engine',id: 'expert_form'} do |f| %>
+<%#= form_for Project.new, :url => import_admin_projects_path(excel_project_ids: @excel_projects.ids), remote: true, :html => {:method => :post, id:'project_form'}  do |f| %>
+
+<%= form_tag(import_admin_projects_path, multipart: true, class:  "valid_engine", id:'project_form') do %>
+<%= hidden_field_tag "q", params[:q] %>
+<%= hidden_field_tag "back", params[:back]%>
+    <div class="form-group row justify-content-start align-items-center">
+        <div class="col-sm-4 text-right">
+            <%= label_tag :name, Project.human_attribute_name("name"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[name]",'项目名称', type: "checkbox"%>
+        </div>
+
+        <div class="col-sm-4 text-right">
+            <%= label_tag :special_name, Project.human_attribute_name("special_name"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[special_name]",'专项', type: "checkbox"%>
+        </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+        <div class="col-sm-4 text-right">
+            <%= label_tag :project_genre_name, Project.human_attribute_name("project_genre_name"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[project_genre_name]",'项目类别', type: "checkbox"%>
+        </div>
+        <div class="col-sm-4 text-right">
+            <%= label_tag :department_name, Project.human_attribute_name("department_name"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[department_name]",'承办科室', type: "checkbox"%>
+        </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+        <div class="col-sm-4 text-right">
+            <%= label_tag :construct_company_name, Project.human_attribute_name("construct_company_name"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[construct_company_name]",'建设单位', type: "checkbox"%>
+        </div>
+        <div class="col-sm-4 text-right">
+            <%= label_tag :capital_origin, Project.human_attribute_name("capital_origin"), class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[capital_origin]",'资金来源', type: "checkbox"%>
+        </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+        <div class="col-sm-4 text-right">
+            <%= label_tag :total_money, Project.human_attribute_name("total_money"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[total_money]",'项目总投资(元)', type: "checkbox"%>
+        </div>
+        <div class="col-sm-4 text-right">
+            <%= label_tag :subsidy_money, Project.human_attribute_name("subsidy_money"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[subsidy_money]",'拟补助金额(元)', type: "checkbox"%>
+        </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+        <div class="col-sm-4 text-right">
+            <%= label_tag :approval_at, Project.human_attribute_name("approval_at"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[approval_at]",'立项时间', type: "checkbox"%>
+        </div>
+        <div class="col-sm-4 text-right">
+            <%= label_tag :plan_completion_at, Project.human_attribute_name("plan_completion_at"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[plan_completion_at]",'计划完成时间', type: "checkbox"%>
+        </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+        <div class="col-sm-4 text-right">
+            <%= label_tag :completion_at, Project.human_attribute_name("completion_at"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[completion_at]",'实际完成时间', type: "checkbox"%>
+        </div>
+        <div class="col-sm-4 text-right">
+            <%= label_tag :progress, Project.human_attribute_name("progress"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[progress]",'项目完成进度', type: "checkbox"%>
+        </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+        <div class="col-sm-4 text-right">
+            <%= label_tag :appropriation_money, Project.human_attribute_name("appropriation_money"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[appropriation_money]",'项目拨付金额(元)', type: "checkbox"%>
+        </div>
+        <div class="col-sm-4 text-right">
+            <%= label_tag :status, Project.human_attribute_name("status"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[status]",'项目状态', type: "checkbox"%>
+        </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+        <div class="col-sm-4 text-right">
+            <%= label_tag :implement_site, Project.human_attribute_name("implement_site"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[implement_site]",'实施地点', type: "checkbox"%>
+        </div>
+        <div class="col-sm-4 text-right">
+            <%= label_tag :implement_unit, Project.human_attribute_name("implement_unit"),class: 'col-form-label' %>
+        </div>
+        <div class="col-sm-2">
+            <%= check_box_tag "project[implement_unit]",'实施单位', type: "checkbox"%>
+        </div>
+    </div>
+<% end %>

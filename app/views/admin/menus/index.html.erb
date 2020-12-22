@@ -1,0 +1,61 @@
+<div class="mt-4">
+  <%= form_for @query, :url => admin_menus_path, :html => {:method => :get, :class => "well form-search form-inline"}  do |f| %>
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label>名称：</label>
+        <%= f.text_field :name_cont ,class: 'form-control ',placeholder: "名称" %>
+        <label>菜单层级：</label>
+        <%= f.select :ancestry_depth_eq, {0=> '一级菜单',1 => '二级菜单'}.invert,{include_blank: '不限'} ,class: 'form-control' %>
+      </div>
+      <%= render 'admin/shared/search_buttons',total_num:  @query.result.count %>
+    </div>
+  <% end %>
+</div>
+<div class="card-body">
+ <!--  <div class="page-header">
+    <%#$= link_to '新增菜单',new_admin_menu_path(back: request.fullpath),class: 'btn btn-primary btn-sm ' if can? :new,Menu %>
+  </div> -->
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="w80">序号</th>
+          <th class="w200">名称</th>
+          <th>父级菜单</th> 
+          <th>链接</th> 
+          <th>排序</th> 
+          <th>图标</th> 
+          <th class="w100">操作</th>
+        </tr>
+      </thead>
+        <tbody>
+          <% @menus.each_with_index do |menu, index| %>
+              <tr>
+                <td class="text-center"><%= show_index(index)%></td>
+                <td class="text-left" >
+                  <%= menu.name %>
+                </td>
+                <td >
+                  <%= menu.ancestry_names %>
+                </td>
+                <td class="text-left" >
+                 <%= menu.url %>
+                </td>
+                <td>
+                 <%= menu.order_num %>
+                </td>
+                <td>
+                 <%= fa_icon_tag menu.icon %>
+                </td>
+                <td class="text-center">
+                   <% edit_link = link_to '修改', edit_admin_menu_path(menu,back: request.fullpath) if can? :edit,menu %>
+                   <% destroy_link = link_to '删除', admin_menu_path(menu, :back => request.fullpath), :method => :delete, data: { confirm: '确定要删除吗?' } if can? :destroy,menu %>
+                  <%= operate_buttons([edit_link, destroy_link].compact) %>
+                </td>
+              </tr>
+            <% end -%>
+          </tbody>
+        </table>
+       <%= paginate @menus %>
+     </div>
+</div>

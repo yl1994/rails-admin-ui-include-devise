@@ -1,0 +1,266 @@
+<%  reloadony ||= false %>
+<div class="ml20">
+  <div class="bd-callout bd-callout-info">
+    <h6 class="m-0 font-weight-bold text-primary" data-toggle="collapse" href="#project_basic_info">基本信息 </h6>
+    <div class="edit_project float-right">
+      <%= link_to_void '修改',class: "btn btn-primary",id: 'edit_project' if (can? :edit,@project) && !reloadony  %>
+    </div>
+  </div>
+</div>
+<div class="collapse show" id="project_basic_info">
+  <div class="w-75 mx-auto">
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">专项</div>
+      <div class="col-10 border  py-2">
+        <%= @project.special_name %>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">项目名称</div>
+      <div class="col-10 border  py-2">
+        <%= @project.name %>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">项目类型</div>
+      <div class="col-4 border  py-2">
+        <%= @project.project_genre_name %>
+      </div>
+      <div class="col-2 font-weight-bold  py-2">承办科室</div>
+      <div class="col-4 border  py-2">
+        <%= @project.department_name  %>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">建设单位</div>
+      <div class="col-4 border  py-2">
+        <%= @project.construct_company_name %>
+      </div>
+      <div class="col-2 font-weight-bold  py-2">拟补助金额(元)</div>
+      <div class="col-4 border  py-2">
+        <%= @project.subsidy_money  %>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">立项时间</div>
+      <div class="col-4 border  py-2">
+        <%= @project.approval_at %>
+      </div>
+      <div class="col-2 font-weight-bold  py-2">计划完成时间</div>
+      <div class="col-4 border  py-2">
+        <%= @project.plan_completion_at  %>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">项目完成进度</div>
+      <div class="col-10 border  py-2">
+        <div class="progress" style="width: 80%;">
+          <div class="progress-bar bg-success " role="progressbar" style="width:<%=  @project.progress %>%;" aria-valuenow="<%=  @project.progress %>" aria-valuemin="<%=  @project.progress %>" aria-valuemax="100">
+            <%= @project.progress %>%</div>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">资金来源</div>
+      <div class="col-4 border  py-2">
+        <%= @project.capital_origin.gsub(',','、') %>
+      </div>
+      <div class="col-2 font-weight-bold  py-2">项目总投资(元)</div>
+      <div class="col-4 border  py-2">
+        <%= @project.total_money  %>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">实施单位</div>
+      <div class="col-10 border  py-2">
+        <%= @project.implement_unit  %>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">项目状态</div>
+      <div class="col-4 border  py-2">
+        <%= @project.status_zh  %>
+      </div>
+      <div class="col-2 font-weight-bold  py-2">实施地点</div>
+      <div class="col-4 border  py-2">
+        <%= @project.implement_site  %>
+      </div>
+    </div>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">备注</div>
+      <div class="col-10 border  py-2">
+        <%= @project.remark %>
+      </div>
+    </div>
+    <% if @transfer_url.present? %>
+    <div class="row mt-2">
+      <div class="col-2 font-weight-bold  py-2">项目实施位置</div>
+      <div class="col-7  py-2">
+        <div class="map">
+          <div id="container"></div>
+          <div id="pickerBox" class="d-none">
+            <input id="pickerInput" placeholder="输入关键字选取地点" />
+            <div id="poiInfo"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-3">
+        <div class="w200 mt15" id="qrcode" class="secondary" data-toggle="tooltip" data-placement="right" title="扫描二维码导航"></div>
+        <div class="text-danger">
+          微信、qq、浏览器扫描
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+</div>
+<div class="ml20">
+  <div class="bd-callout bd-callout-info">
+    <h6 class="m-0 font-weight-bold text-primary" data-toggle="collapse" href="#project_capital_info">资金来源 </h6>
+  </div>
+</div>
+<div class="collapse show ml20" id="project_capital_info">
+  <table class="table table-bordered table-sm ">
+    <thead>
+      <tr>
+        <th class="index">序号</th>
+        <th>来源</th>
+        <th>金额(元)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @project.capitals.each_with_index do |capital,index| %>
+      <tr>
+        <td>
+          <%= show_index(index) %>
+        </td>
+        <td>
+          <%= capital.origin %>
+        </td>
+        <td>
+          <%= capital.money %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+<% content_for :js do %>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.9&key=<%=SettingConfig.gaode&.web&.key %>&plugin=AMap.PlaceSearch,AMap.Geocoder"></script>
+<!-- UI组件库 1.0 -->
+<script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<% end %>
+<script type="text/javascript">
+// 地图初始化
+var lnglats = <%= [@project.lng,@project.lat].compact %>;
+if (lnglats.length > 0) {
+  var marker, map = new AMap.Map('container', {
+    zoom: 16,
+    center: lnglats
+
+  });
+}
+var geocoder = new AMap.Geocoder({
+  radius: 1000 //范围，默认：500
+});
+
+
+
+function regeoCode(lnglat, infoWindow) {
+  infoWindow.setMap(map);
+  infoWindow.setPosition(lnglat);
+  geocoder.getAddress(lnglat, function(status, result) {
+    if (status === 'complete' && result.regeocode) {
+      var address = result.regeocode.formattedAddress;
+      infoWindow.setContent(address);
+    } else {
+      infoWindow.setContent("根据经纬度查询地址失败");
+    }
+  });
+}
+
+
+// 地图选点
+function poiPickerReady(apiKey, poiPicker, map, addressObj) {
+  window.poiPicker = poiPicker;
+  if (lnglats.length > 0) {
+    marker = new AMap.Marker({ location: lnglats });
+    var infoWindow = new AMap.InfoWindow({
+      offset: new AMap.Pixel(0, -20),
+    });
+    marker.setMap(map);
+    infoWindow.setMap(map);
+    marker.setPosition(lnglats);
+    infoWindow.setPosition(lnglats);
+    regeoCode(lnglats, infoWindow)
+    infoWindow.open(map, marker.getPosition())
+    // infoWindow.setContent('详细信息: ' + addressObj.title + " " + addressObj.address);
+    infoWindow.open(map, marker.getPosition());
+  } else {
+    marker = new AMap.Marker();
+    var infoWindow = new AMap.InfoWindow({
+      offset: new AMap.Pixel(0, -20),
+    });
+  }
+
+  //选取了某个POI
+  poiPicker.on('poiPicked', function(poiResult) {
+    var source = poiResult.source,
+      poi = poiResult.item,
+      info = {
+        source: source,
+        id: poi.id,
+        name: poi.name,
+        location: poi.location.toString(),
+        address: poi.address
+      };
+    var data = {
+      key: apiKey,
+      location: poi.location.toString(),
+    }
+    marker.setMap(map);
+    infoWindow.setMap(map);
+    $("#project_lng").val(poi.location.lng)
+    $("#project_lat").val(poi.location.lat)
+    marker.setPosition(poi.location);
+    infoWindow.setPosition(poi.location);
+    infoWindow.setContent('详细信息: ' + info.name + " " + info.address);
+    infoWindow.open(map, marker.getPosition());
+  });
+}
+
+function initMap(addressObj) {
+  AMapUI.loadUI(['misc/PoiPicker'], function(PoiPicker) {
+    var poiPicker = new PoiPicker({
+      input: 'pickerInput'
+    });
+    //初始化poiPicker
+    poiPickerReady("<%= SettingConfig.gaode&.api&.key %>", poiPicker, map, addressObj);
+  });
+}
+
+$(function() {
+  var transfer_url = "<%= @transfer_url %>"
+  if (lnglats.length > 0 && transfer_url) {
+    $('#qrcode').qrcode({
+      text: transfer_url,
+      width: 180,
+      height: 180,
+    });
+  }
+  if (lnglats.length > 0) { initMap(null) };
+  $(document).on('click', '#edit_project', function(event) {
+    $("#basic_info").html("<%= j(render partial: 'admin/projects/form'  )%>")
+  });
+})
+
+</script>
+<style type="text/css">
+.map #container {
+  width: 480px;
+  height: 200px;
+  margin: 0px;
+  font-size: 13px;
+}
+
+</style>

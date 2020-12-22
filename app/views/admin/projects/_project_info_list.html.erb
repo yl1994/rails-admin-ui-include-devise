@@ -1,0 +1,23 @@
+<%  reloadony ||= false %>
+<table class="table table-bordered table-sm ">
+<thead>
+  <tr>
+    <th class="index">序号</th>
+    <th>文件说明</th>
+    <th>操作</th>
+  </tr>
+</thead>
+<tbody> 
+  <% @project.project_infos.by_file_type(file_type_children_id).each_with_index do |project_info,index| %>
+    <tr>
+      <td><%= show_index(index) %></td>
+      <td> <%= project_info.name %></td>
+      <td class="w200">
+        <%= link_to '查看',show_project_info_admin_project_path(@project,project_info_id: project_info.id),class: 'btn btn-info btn-sm',remote: true   if can? :show,@project  %>
+        <%= link_to '修改',edit_project_info_admin_project_path(@project,project_info_id: project_info.id),class: 'btn btn-primary btn-sm',remote: true   if (can? :edit,@project) && !reloadony  %>
+        <%= link_to'删除', destroy_project_info_admin_project_path(@project,project_info_id: project_info.id),class: 'btn btn-danger  btn-sm delete_btn',remote: true, :method => :delete, data: { confirm: '确定要刪除吗?' }  if (can? :edit,@project)  && !reloadony   %>            
+      </td>
+    </tr>
+  <% end %>  
+</tbody>
+</table> 

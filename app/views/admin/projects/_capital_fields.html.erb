@@ -1,0 +1,21 @@
+<div class="mx-auto nested_form">
+  <div class="form-group row justify-content-start align-items-center mt5">
+    <div class="col-sm-2 text-right">
+      <%= require_span %><%= f.label :origin,class: 'col-form-label' %>
+    </div>
+    <div class="col-sm-3">
+      <%= f.select :origin, Capital::ORIGIN,{include_blank: '请选择'},{class: 'custom-select validate[required]'} %>
+    </div>
+    <div class="col-sm-2 text-right">
+      <span class="ml5"><%= require_span %></span><%= f.label :money,class: 'col-form-label' %>
+    </div>
+    <div class="col-sm-3">
+       <%= f.text_field :money,value: f.object.money.to_f >0 ? f.object.money : nil,class: 'form-control validate[required] money capital_money' %>
+    </div>
+    <div class="col-sm-2">     
+      <%= f.hidden_field :_destroy %>
+      <%= link_to_remove_fields '移除',class: 'w100 ml10 btn btn-danger btn-sm text-white' %>
+    </div>
+  </div>
+</div>
+ 

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= SettingConfig.site_name  %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= stylesheet_pack_tag 'admin' %>
+    <%= javascript_pack_tag 'admin' %>
+    <%= javascript_include_tag '/tinymce/tinymce.min' %>
+    <%= yield :js %>
+  </head>
+
+  <body id="page-top">
+    <div id="wrapper">
+      <div id="content-wrapper" class="d-flex flex-column">
+
+        <div id="content">
+
+          <div class="container-fluid">
+            <div class="legend mt15">
+              <legend>
+                <h4>
+                  <% if pe = Menu.find_by_url(current_path)  %>
+                    <%= pe.name %>
+                  <% else %>
+                    <%= yield :legend %>
+                  <% end -%>
+                </h4>
+              </legend>
+            </div>
+            <div class="card shadow mt-4">
+              <%= yield %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+      <i class="fas fa-angle-up"></i>
+    </a>
+    <!-- 提示信息 -->
+   <script type="text/javascript">
+     <% flash.each do |status, msg| %>
+          var type = "<%= status %>";
+          if(type == 'notice'){
+            type = 'success'
+          }
+          toastr[type]("<%= msg %>","<%= notice_tip(status) %>")
+     <% end %>
+     $(function(){
+        tinymce.init({
+            selector: '.mytextarea',
+            base_url: '/tinymce/',
+            language: 'zh_CN',
+            min_height: 500,
+            width: 800,
+            statusbar: false,
+            menubar:false,
+            plugins: "table | lists, advlist | image | code",
+            toolbar: "code undo redo restoredraft | cut copy | forecolor backcolor bold italic underline strikethrough link | alignleft aligncenter alignright alignjustify | bullist numlist blockquote subscript superscript removeformat | \
+                    formatselect fontselect fontsizeselect | \
+                    table image media charmap emoticons hr pagebreak print preview | fullscreen | bdmap indent2em lineheight formatpainter axupimgs",
+            toolbar_mode : 'wrap',
+            images_upload_handler: function (blobInfo, succFun, failFun) {
+                var xhr, formData;
+                var file = blobInfo.blob();//转化为易于理解的file对象
+                formData = new FormData();
+                formData.append('file', file, file.name );//此处与源文档不一样
+                if (file.size/1024 > 1024) {
+                    failFun('HTTP Error: 上传图片不能超过1M');
+                    return;
+                }
+                ajax({
+                  url: '/images_upload',
+                  type: "post",
+                  data: formData,
+                  dataType:'json',
+                  processData : false, // 使数据不做处理
+                  contentType : false, // 不要设置Content-Type请求头
+                  success: function (data) {
+                    var json;
+                    if (data.status != 200) {
+                        failFun('HTTP Error: ' + xhr.status);
+                        return;
+                    }
+                    // json = JSON.parse(data.responseText);
+                    if (!data || typeof data.file != 'string') {
+                        failFun('Invalid JSON: ' + data);
+                        return;
+                    }
+                    succFun(data.file);
+                  },
+                });
+                // xhr = new XMLHttpRequest();
+                // xhr.withCredentials = false;
+                // xhr.open('POST', '/images_upload');
+                // xhr.onload = function() {
+                //     var json;
+                //     if (xhr.status != 200) {
+                //         failFun('HTTP Error: ' + xhr.status);
+                //         return;
+                //     }
+                //     json = JSON.parse(xhr.responseText);
+                //     if (!json || typeof json.file != 'string') {
+                //         failFun('Invalid JSON: ' + xhr.responseText);
+                //         return;
+                //     }
+                //     succFun(json.file);
+                // };
+                
+                // xhr.send(formData);
+            }
+        });
+     })
+   </script>
+    
+  </body>
+
+</html>

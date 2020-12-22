@@ -1,0 +1,6 @@
+<% if !@flag %>
+  toastr['error']("<%= flash[:error] %>","<%= notice_tip('error') %>")
+<% else %>
+  //window.location.href = "<%= admin_root_path %>" 
+  window.location.reload(); 
+<% end %>

@@ -1,0 +1,14 @@
+<div class="card-header py-3">
+  <h6 class="m-0 font-weight-bold text-primary"><%= @role.name%>-分配权限</h6>
+</div>
+<div class="card-body">
+  <%= link_to_back url: params[:back] %>
+  <%= hidden_field_tag "permissions", @permissions.to_json %>
+  <%= hidden_field_tag "assign_permissions_url", assign_permissions_do_admin_role_path(@role) %>
+  
+  <ul id="role_permissions_tree" class="ztree" style="width:560px; overflow:auto;"></ul>
+</div>
+
+<%= content_for :js  do %>
+  <%= javascript_pack_tag 'admin/roles/assign_permissions' %>
+<% end %>

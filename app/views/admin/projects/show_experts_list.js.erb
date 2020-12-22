@@ -1,0 +1,12 @@
+
+var partial = "<%= j(render partial: 'extract_message',locals: {extract_experts: @extract_experts,extract_record:  @extract_record})%>";
+var d = dialog({
+  id: 'extract_experts_dialog',
+  title: '专家信息',
+  content: partial,
+  cancelValue: '关闭',
+  cancel: function () {
+    window.location.reload();
+  }
+});
+d.showModal()

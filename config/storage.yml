@@ -1,0 +1,23 @@
+minio:
+   service: S3
+   access_key_id: <%= SettingConfig.minio&.username %>
+   secret_access_key: <%= SettingConfig.minio&.password %>
+   region: us-east-1
+   bucket: <%= SettingConfig.minio&.bucket %>
+   endpoint: <%= SettingConfig.minio&.host %>
+   force_path_style: true
+
+local:
+  service: Disk
+  root: <%= Rails.root.join("storage") %>
+
+huawei:
+  service: S3
+  access_key_id: <%= SettingConfig.huawei&.access_key_id %>
+  secret_access_key: <%= SettingConfig.huawei&.secret_access_key %>
+  region: cn-east-2
+  bucket: <%= SettingConfig.huawei&.bucket %>
+  endpoint: <%= SettingConfig.huawei&.endpoint %>
+
+
+   

@@ -1,0 +1,15 @@
+<%= form_for [:admin, current_user] ,url: admin_home_update_signature_path(back: request.fullpath),remote: true, method: :post, html: {class: 'valid_engine',id:'my_info_form'} do |f| %>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <%= f.label :signature,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-10 mb-3 mb-sm-0">
+          <%= f.file_field :e_signature,class: "validate[custom[jpgOrPng]]" %>
+      </div>
+    </div>
+<% end -%>
+<script type="text/javascript">
+  $(function(){
+    $("#my_info_form").validationEngine();
+  })
+</script>

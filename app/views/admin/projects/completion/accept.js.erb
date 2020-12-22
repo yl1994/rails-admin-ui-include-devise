@@ -1,0 +1,21 @@
+var d = dialog({
+  id: 'accept',
+  title: '验收',
+  width: 800,
+  height: 510,
+  content: "<%= j(render partial: 'admin/projects/completion/accept')  %>",
+  okValue: '确定',
+    ok: function () {
+      if(!$("#project_completion_accept_form").validationEngine("validate")){
+        console.log('form  error')
+        return false;
+       }
+      var form = document.querySelector('#project_completion_accept_form');
+      $(".ui-dialog-button button[i-id=ok]").attr("disabled",true);
+      Rails.fire(form, 'submit');
+      return false
+    },
+    cancelValue: '取消',
+    cancel: function () {}
+});
+d.showModal();

@@ -1,0 +1,7 @@
+var d = dialog({
+  title: '项目进度记录',
+  content: "<%= j(render partial: 'project_schedule_list')  %>",
+  cancelValue: '关闭',
+  cancel: function () {}
+});
+d.showModal();

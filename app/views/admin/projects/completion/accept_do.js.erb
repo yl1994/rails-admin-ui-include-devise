@@ -1,0 +1,6 @@
+<% if !@flag %>
+  toastr['error']("<%= flash[:error] %>","<%= notice_tip('error') %>")
+  $(".ui-dialog-button button[i-id=ok]").attr("disabled",false);
+<% else %>
+  window.location.href = "<%= params[:back_url] %>"  
+<% end %>

@@ -1,0 +1,60 @@
+<%= form_for [:admin, @project_info] ,url: '' , html: {class: 'valid_engine', remote: true,id: 'project_info_form'} do |f| %>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :name,class: 'col-form-label' %>
+    </div>
+    <div class="col-sm-10">
+      <%= @project_info.name %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <label class="col-form-label">文件</label>
+    </div>
+    <div class="col-sm-10">
+      <%= f.file_field :files_readonly, multiple: true, direct_upload: true,class: 'd-none' %>
+    </div>
+  </div>
+
+  <%= f.hidden_field :project_id %>
+  <%= f.hidden_field :file_type_id %>
+<% end %>
+<script type="text/javascript">
+  $(function(){
+    $('#project_info_files_readonly').fileinput({
+        uploadUrl: '#',
+        showUpload: false, //是否显示文件上传按钮
+        showRemove: false, //是否显示移除按钮
+        showClose: false, // 是否显示关闭按钮
+        layoutTemplates: {
+           actionUpload: '',
+        },//渲染布局每部分的模板配置
+        previewFileIconSettings: {
+             'docx': '<i ass="fa fa-file-word text-primary"></i>',
+             'doc': '<i ass="fa fa-file-word text-primar"></i>',
+             'xlsx': '<i class="fa fa-file-excel text-success"></i>',
+             'xls': '<i class="fa fa-file-excel text-success"></i>',
+             'pptx': '<i class="fa fa-file-powerpoint text-danger"></i>',
+             'ppt': '<i class="fa fa-file-powerpoint text-danger"></i>',
+         
+         },//对象每个文件扩展名（类型）的预览图标标记设置
+        overwriteInitial: false, //否要覆盖初始预览内容和标题设置
+        initialPreviewAsData: true, //是否将初始预览内容集解析为数据而不是原始标记语言
+        initialPreview: <%= raw(@initial_previews.presence || [] )  %> , //字符串或者数组，要显示的初始预览内容
+        initialPreviewConfig: <%=  raw(@initial_preview_configs.presence || [] )  %>, //设置重要属性的配置。
+        theme: 'explorer-fas', //主图
+        language: 'zh', // 语言
+    })
+  })
+</script>
+
+<style type="text/css">
+  .file-drop-zone {
+    height: 350px;
+    overflow: auto;
+  }
+  .file-caption-main, .file-drag-handle.drag-handle-init, .kv-file-remove {
+     display: none !important;
+  }
+</style>

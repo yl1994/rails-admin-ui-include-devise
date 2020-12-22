@@ -1,0 +1,224 @@
+zh-CN:
+  activerecord:
+    models:
+      user: 用户
+      insurance: 农业保险数据 
+      declare_project: 拟申报项目
+    attributes:
+      user:
+        email: 邮箱
+        password: 密码
+        phone: 手机号
+        loginname: 登录名
+        realname: 姓名
+        password_confirmation: 确认密码
+        old_password: 当前密码
+        password_confirmation: 重复密码
+        department: 用户单位
+        role: 用户角色
+        cdepartment: 分配单位
+        avator: 头像
+        signature: 签名
+        project_count: 项目条数
+      menu:
+        name: 名称
+        url: 链接地址
+        parent_id: 父节点
+        order_num: 排序
+        icon: 图标
+        ancestry_depth: 层级
+      role:
+        name: 名称
+        code: 编码
+        desc: 描述
+      article:
+        title: 标题
+        published: 是否发布
+        content: 正文内容
+        published_at: 文章发布时间
+        category: 分类 
+        position: 位置
+        file: 文件
+      article_category:
+        name: 名称
+        remark: 描述
+      department:
+        name: 单位名称
+        leader: 分管领导
+        parent_id: 父级单位
+        remark: 描述
+        email: 邮箱
+        phone: 手机号
+        loginname: 登录名
+        realname: 姓名
+        leader_name: 分管领导
+      project:
+        special_name: 专项
+        name: 项目名称
+        major_category_id: 专业类型
+        major_category_name: 专业类型
+        project_genre_id: 项目类别
+        project_genre_name: 项目类别
+        department_id: 承办科室
+        department_name: 承办科室
+        construct_company_name: 建设单位
+        total_money: 项目总投资(元)
+        subsidy_money: 拟补助金额(元)
+        approval_at: 立项时间
+        plan_completion_at: 计划完成时间
+        completion_at: 实际完成时间
+        status: 项目状态
+        progress: 项目完成进度
+        appropriation_money: 项目拨付金额(元)
+        implement_site: 实施地点
+        implement_unit: 实施单位
+        experts_name: 选择专家
+        is_extract: 抽取专家
+        old_password: 当前密码
+        remark: 备注
+        capital_origin: 资金来源
+      project_special:
+        name: 名称
+        projects: 项目
+      declare_project:
+        special_name: '专项'
+        direction: '拟申报方向'
+        direction_genre_id: '项目类型Id'
+        direction_genre_name: '项目名称'
+        construction_site: '建设地点'
+        construction_unit: '建设单位'
+        scale: '规模'
+        total_investment: '总投资(元)'
+        apply_county_money: '申请市级补助(元)'
+        remark: '备注'
+        status: '项目状态'
+      project_completion_accept:
+        status: 验收状态
+        remark: 备注
+        file:   文件
+      project_info:
+        name: 文件说明
+      project_schedule:
+        progress: 进度
+        remark: 备注
+        schedule_at: 调整时间
+      capital:
+        origin: 来源
+        money:  金额(元)
+      appropriation:
+        money:  本次拨付金额(元)
+        appropriation_at: 拨付时间
+        remark: 拨付说明
+      expert:  
+        name: 姓名
+        phone: 电话
+        age: 年龄
+        nature: 性质  
+        department_name: 单位 
+        call_title: 职称 
+        position: 职务 
+        major_str: 专业 
+        gender: 性别
+        major_category_str: 专业类别 
+        need_fee: 是否本单位
+      major:
+        name: 专业名称 
+        categoryname: 选择专业类别
+        major_or_categories:
+          major_id: 专业
+          major_category_id: 专业类别
+      major_category:
+        name: 专业类别               
+      operation_func:
+        name: 功能名称  
+        code: 功能编码
+      operation_status:
+        name: 状态名称  
+        code: 状态编码
+        is_show: 是否展示
+      file_type:
+        name: 文件名称  
+        code: 文件编码
+        desc: 文件描述
+        major_name: 项目类型
+        is_show: 是否展示
+        parent_id: 父级文件
+        position: 排序
+      model_plate:
+        name: 名称  
+        announcement_type: 公告分类
+        published: 是否可用
+        notice_type: 公告类型
+      model_plate_key:
+        name: 名称  
+        font_type: 字段类型
+        position: 排序 
+        published: 是否可用 
+        parent_id: 父节点 
+        is_show: 是否显示
+        show_text: 默认文本
+        explain: 说明
+        default_true: 是否为默认值
+        style_type: 特殊展示  
+        essential: 是否必填
+        is_money: 是否金额      
+      announcement:
+        name: 公告名称
+        remark: 描述
+        model_plate: 公告类型
+        files: 附件
+      project_certification:
+        basis: 验收依据
+        content: 主要验收内容
+        advice: 验收建议
+        acceptance_at: 拟验收时间
+        apply_at: 申请时间
+        audit_at: 时间
+        acceptance_type: 验收方式
+        audit_audit_at: 确认时间
+      notice_type:
+        name: 类型名称
+        usable: 是否启用
+        position: 排序
+      insurance:
+        name: '保险名称'
+        genere: '投保类别'
+        township : '乡镇'
+        policy_no : '保单号'
+        fullname: '被保险人姓名'
+        org_name: '组织名称' 
+        id_no: '身份证号'
+        org_code: '组织机构代码' 
+        yzt_no:  '一折通号码'
+        subject_address:  '标的地址'
+        contact_phone:  '联系电话'
+        subject_type:  '标的种类'
+        subject_name:  '标的名称'
+        subject_num: "投保数量"  
+        premium_rate:  '保费费率'
+        subject_price:  '缴费标准(元)'
+        premium_total:  '总保费(元)'
+        since_premium_price: "农户自缴保费标准(元)"
+        since_premium_total: "农户自缴保费总价(元)"   
+        center_subsidy_price: "中央补贴标准(元)"
+        center_subsidy_total: "中央补贴总价(元)"
+        province_subsidy_price: "省级补贴标准(元)"
+        province_subsidy_total: "省级补贴总价(元)"
+        county_subsidy_price: "县区补贴标准(元)"
+        county_subsidy_total: "县区补贴总价(元)"
+        fiscal_subsidy_total: "各级财政补贴总价(元)"
+        start_at: "起保日期"
+        end_at: "截止时间"
+        insurance_num : "投保人数"
+        insurance_code : '险种代码'
+        insure_organizer: '投保组织者'    
+        pay_premium_total: "农户已交保费(元)"
+        clsd_total: "已结算(元)"
+        apply_clsd_total: "申请结算(元)"
+        remark: "备注"
+      extract_detail:
+        major_category : 专家大类
+        major : 专家专业
+        is_department : 是否本单位
+        experts_number : 专家数量
+        experts_ids : 专家

@@ -1,0 +1,40 @@
+<%= form_for [:admin,@menu] ,html: {class: 'valid_engine',id: 'menu_form'} do |f| %>
+  <div class="w-75 mx-auto">
+    <div class="row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= require_span %> <%= f.label :name,class: 'col-form-label' %></div>
+      <div class="col-8"><%= @menu.name %></div>
+    </div>
+    <div class=" pt-3 row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= f.label :url,class: ' col-form-label' %></div>
+      <%= f.hidden_field :permission_id  %>
+      <div class="col-8"><%= dynamic_selects(Permission, @menu.permission_id, "menu_permission_id") %></div>
+    </div>
+    <div class=" pt-3 row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= f.label :order_num,class: ' col-form-label' %></div>
+      <div class="col-8"><%= f.text_field :order_num,class: 'form-control' %></div>
+    </div>
+    <div class=" pt-3 row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= f.label :icon,class: ' col-form-label' %></div>
+      <div class="col-8"><%= f.text_field :icon,class: 'form-control' %></div>
+    </div>
+    <div class=" pt-3 row justify-content-start align-items-center">
+      <div class="col-2 text-right"><%= f.label :parent_id,class: ' col-form-label' %></div>
+      <div class="col-8"><%= f.select :parent_id, Menu.roots.pluck(:name,:id),{include_blank: '请选择'},{class: 'custom-select-fixed-width w200'} %></div>
+    </div>
+  </div>
+  <%= hidden_field_tag :back, params[:back] %>
+  <div class="w-75 p-3 mx-auto text-center">
+    <%= f.submit '提交', class: "btn btn-primary" %>
+    <%= link_to_back url: params[:back] || admin_menus_path(@menu) %>
+  </div>
+<% end -%>
+<script type="text/javascript">
+  $(function(){
+    $("#menu_form").submit(function(){
+      if($(".multi-level").val() && !($(".multi-level")[2] && $(".multi-level")[2].value)){
+        alert("请选择最底层链接地址");
+        return false;
+      }
+    })
+  })
+</script>

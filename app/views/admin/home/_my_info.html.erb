@@ -1,0 +1,85 @@
+<%= form_for [:admin, current_user] ,url: admin_home_update_my_info_path(back: request.fullpath), method: :post, html: {class: 'valid_engine',id:'my_info_form'} do |f| %>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <%#= f.label :avator,class: 'col-form-label'%>
+        <label>
+          <% if current_user.avator.attached? %>
+            <%=image_tag url_for(current_user.avator),class: 'img-profile rounded-circle',size: 50 %>
+          <% else %>
+            <%= image_pack_tag 'media/img/default_avator1.jpg',class: 'img-profile rounded-circle',id: 'user_avator_img' ,size: 50  %>
+          <% end %>
+        </label>
+      </div>
+      <div class="col-sm-10">
+        <label for="user_avator" class="btn btn-success btn-sm ">更换头像</label>
+        <%= f.file_field :avator, accept: "image/png,image/jpeg", class: 'd-none' %>
+      </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <%= require_span %><%= f.label :loginname,class: 'col-form-label' %>
+      </div>
+      <div class="col-sm-4 ">
+        <%= f.text_field :loginname, autofocus: true, autocomplete: "loginname",class: 'form-control validate[required]' ,placeholder:"用户名" %>
+      </div>
+      <div class="col-sm-2 text-right">
+        <%= require_span %><%= f.label :phone,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= f.text_field :phone, autofocus: true, autocomplete: "phone",class: "form-control form-control-user validate[required,phone]",placeholder:"手机号" %>
+      </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+       <%= f.label :realname,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= f.text_field :realname, autofocus: true,class: "form-control form-control-user",placeholder:"真实姓名" %>
+      </div>
+      <div class="col-sm-2 text-right">
+        <%= require_span %><%= f.label :email,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= f.email_field :email, autofocus: true, autocomplete: "email",class: "form-control form-control-user validate[required,email]",placeholder:"邮箱" %>
+      </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+       <%= f.label :department,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= current_user.try(:department)&.name %>
+      </div>
+      <div class="col-sm-2 text-right">
+        <%= f.label :role,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-4 mb-3 mb-sm-0">
+        <%= badges_tag(current_user.roles.pluck(:name)) %>
+      </div>
+    </div>
+<% end -%>
+<script type="text/javascript">
+  $(function(){
+    $("#my_info_form").validationEngine();
+    $("#user_avator").change(function(event) {
+      var files = $("#user_avator").get(0).files[0]; //获取file控件中的内容                       
+      var formData = new FormData();
+      formData.append("avator", files);
+       $.ajax({
+         type:"POST",
+         url:"<%= admin_home_update_my_avator_path %>",//接口请求地址
+         contentType:false,
+         processData: false,
+         data:formData,
+        success:function(data){
+          if(data.success){
+            //预览图片  
+            $(".img-profile").attr("src",data.avator_url);
+          }
+        }
+      });
+
+
+    });
+  })
+</script>

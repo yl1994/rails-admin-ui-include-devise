@@ -1,0 +1,11 @@
+<%= form_for [:admin, @project] ,url: update_status_admin_project_path(@project),method: :post, html: {class: 'valid_engine',id: 'project_status_form'} do |f| %>
+  <div class="form-group row justify-content-start align-items-center w300" >
+    <div class="col-sm-4 text-right">
+      <%= f.label :status,class: 'col-form-label'%>
+    </div>
+    <%= hidden_field_tag :back, params[:back] %>
+    <div class="col-sm-8 mb-3 mb-sm-0">
+      <%= f.select :status, OperationStatus.show.pluck(:name,:code), {include_blank: '请选择'},{class: 'form-control custom-select-fixed-width' } %>
+    </div>
+  </div>
+<% end %>

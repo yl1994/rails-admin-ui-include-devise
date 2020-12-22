@@ -1,0 +1,147 @@
+<div class="mx-3 mt-4">
+  <h4 class="title">南通市通州区农业项目验收申请表</h4>
+</div>
+    <div class="subtitle mx-3">
+      <div>
+        承办科室:<%= @accept&.department_name %>
+      </div>
+      <div>
+        申请时间:<%= @accept&.apply_at&.strftime("%Y年%m月%d日") %>
+      </div>
+    </div>
+<%= form_for @accept, :url => accept_certificate_do_admin_project_path(@project), remote: true, :html => {:method => :post, :class => "mt10 valid_engine",id: 'accept_form'}  do |f| %>
+    <table class="table_form mx-3 mb-3" cellpadding="0" cellspacing="0" id='accept_form'>
+    <tr>
+      <td class="tc w-8 b">
+        项目名称
+      </td>
+      <td class="w-42 tl">
+        <%= @accept&.project_name %>
+      </td>
+      <td class="tc w-8 b">
+        实施单位
+      </td>
+      <td class="w-42 tl">
+        <%= @accept&.construct_company_name %>
+      </td>
+    </tr>
+    <tr>
+      <td class="tc w-8 b">
+        验收依据
+      </td>
+      <td colspan="3" class="tl">
+        <%= raw @accept&.basis %>
+      </td>
+    </tr>
+     <tr>
+      <td class="tc w-8 b">
+        主要验收内容
+      </td>
+      <td colspan="3" class="tl">
+        <%= raw @accept&.content %>
+      </td>
+    </tr>
+       <tr>
+      <td class="tc w-8 b">
+        验收建议
+      </td>
+      <td colspan="3" class="tl">
+        <div class="mb-3"><%= raw @accept&.advice %></div>
+        <div class="mb-3 subtitle">
+        <div class="w-50">
+          验收方式:
+       <%= ProjectCertification::ACCEPTANCETYPE[@accept&.acceptance_type] %>
+        </div>
+        <div class="w-50">
+          资金来源:
+          <%= @project&.capital_origin&.gsub(',','、') %>
+        </div>
+    </div>
+       <div class="mb-3">
+         拟验收时间:
+         <%= @accept&.acceptance_at&.strftime("%Y年%m月%d日") %>
+       </div>
+       <div class="subtitle mb-3">
+         <div class="w-50">承办科室负责人:<%= @accept&.apply_user_name %> </div>
+          <% if current_user.e_signature.attached?%>
+            <div class="w-50">分管领导: <%= @accept&.audit_user_name %> </div>
+          <%else%>
+          <div class="w-50">
+             请选择签名图片:
+             <%#= f.file_field :e_signature,class: "validate[custom[jpgOrPng]]" %>
+          </div>
+          <%end%>
+      </div>
+    <div class="row justify-content-start align-items-center">
+      <div class="col-sm-4 font-weight-bold  py-2 text-right">
+         <%= require_span %> <%= f.label :audit_at,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-8 mb-3 mb-sm-0">
+        <%= f.text_field :audit_at,value: Time.now, class: 'form-control flatpickr validate[required]'%>
+      </div>
+    </div>
+      </td>
+    </tr>
+    </table>
+    <%= hidden_field_tag :ctype %>
+    <%= hidden_field_tag :dis_reason %>
+    <%= hidden_field_tag :old_password %>
+    <%= hidden_field_tag :back_url, params[:back] || admin_projects_path  %>
+  <% end %> 
+
+<style type="text/css">
+  .tc{
+    text-align: center;
+  }
+  .tr{
+    text-align: right;
+  }
+  .tl{
+    text-align: left;
+  }
+  .mr50{
+    margin-right: 50px;
+  }
+  .w-8{
+    width: 8%;
+  }
+  .w-42{
+    width: 42%;
+  }
+  .w-50{
+    width: 50%;
+  }
+  .b{
+    font-weight: bold;
+  }
+  .title{
+    text-align: center;
+    font-size: 20px;
+    color: #000;
+  }
+  .subtitle{
+    display: flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+  }
+  .table_form{
+    font-size: 16px;
+    border: 1px solid #333;
+    border-bottom: 0;
+    border-right: 0;
+    color: #333;
+    margin-top: 20px;
+  }
+  .table_form td{
+    border-right: 1px solid #333;
+    border-bottom: 1px solid #333;
+    padding: 10px;
+  }
+ 
+</style>
+

@@ -1,0 +1,257 @@
+<div class="mx-auto nested_form" >
+  <div class="form-group row justify-content-start align-items-center mt5">
+	<div class="col-sm-2">
+	 <%= f.select :major_category_id, MajorCategory.pluck(:name,:id),{include_blank: true},{class: 'custom-select-fixed-width w-100 select2 major_category validate[required]',data: {placeholder: '请选择专家类别'}} %>
+	</div>
+	<div class="col-sm-2" >
+	<%= f.select :major_ids, [], {} ,{class: "select2 w-100 major_select validate[required] ", prompt: "请选择",multiple: true,data: {placeholder: "请选择专家专业"}} %>
+	</div>
+	<div class="col-sm-2">
+	  <%= f.select :is_department, [["是", 1], ["否",0],["随机", 2]],{include_blank: '是否本单位'},{class: 'select2_tags custom-select validate[required] is_department'}  %>
+	</div>
+  <div class="col-sm-3">
+    <%= f.select :experts_ids, [], {} ,{class: "select2 w230 major_expert", prompt: "请选择",disabled: true,multiple: true,data: {placeholder: "请选择专家"}} %>
+  </div>
+  <div class="col-sm-1">
+    <%= f.text_field :experts_number, autofocus: true, autocomplete: "experts_number",class: 'form-control validate[required]] major_num' ,readonly: true,placeholder:"数量" %>
+  </div>
+  <div class="col-sm-1 text-left">
+    <%= f.hidden_field :_destroy %>
+    <%= link_to_remove_fields '移除',class: 'w100 ml10 btn btn-danger btn-sm text-white delete_detail'%>
+  </div>
+</div>
+
+
+</div>
+
+<script type="text/javascript">
+$(function() {
+    // select2 初始化
+    $('.select2').select2({
+      theme: 'bootstrap4',
+       language: {
+          noResults: function(params) {
+              return "暂无数据";
+          }
+     }
+    });
+    $(".major_select").on("select2:select", function (evt) {
+      if(evt.params.data.id == 'none'){
+        $(this).find("option[value!='none']").attr("disabled",true);
+        $(this).val(['none']).trigger('change');
+     
+      }
+     
+     });
+
+    $(".major_select").on("select2:unselect", function (evt) {
+       if(evt.params.data.id == 'none'){
+        $(this).find('option').attr("disabled",false);
+       }
+     });
+   $('.total_num').change(function(event) {
+     /* Act on the event */
+     toggleAdd()
+     var total_num = parseInt($('.total_num').val());
+     var sum = 0;
+     $('.major_num:visible').each(function(i,e){
+         sum += parseFloat($(e).val() || 0 )
+     })
+     if(total_num < sum){
+       $('.major_num:visible').each(function(i,e){
+         $(e).val('')
+       })
+       $('.major_expert:visible').each(function(i,e){
+         var major_expert_data = $(e).parents(".nested_form").find('.major_expert').select2({ 
+           theme: 'bootstrap4',
+           language: {
+             noResults: function(params) {
+                 return "暂无数据";
+             },
+              maximumSelected: function(n){
+                return"最多只能选择"+n.maximum+"个选项";
+              }
+           }
+         });//获取selectid
+         major_expert_data.val('').trigger("change");
+       })
+
+     }
+     $('.major_expert:visible').each(function(i,e){
+       setMaxSelect(e);
+     })
+   });
+   // 删除事件
+   $('.delete_detail').click(function(event) {
+     /* Act on the event */
+     toggleAdd(true)
+   });
+   // 选择专家
+   $('.major_expert').on('select2:select', function (e) {
+     setMaxSelect(this)
+     if($(this).find(":selected").length > 0){
+       $(this).parents(".nested_form").find('.major_num').val($(this).find(":selected").length) 
+     }else{
+      $(this).parents(".nested_form").find('.major_num').val('') 
+     }
+     $('.major_expert:visible').not(this).each(function(i,e){
+       setMaxSelect(e);
+     })
+     toggleAdd()
+   });
+  
+  $('.major_expert').on('select2:unselect', function (e) {
+    if($(this).find(":selected").length > 0){
+      $(this).parents(".nested_form").find('.major_num').val($(this).find(":selected").length) 
+    }else{
+     $(this).parents(".nested_form").find('.major_num').val('') 
+    }
+    toggleAdd()  
+  });
+
+    
+    // 是否本单位
+    $(".is_department").change(function(){
+      $(this).parents(".nested_form").find('.major_num').val('');
+      if ($(this).val() && $(this).parents(".nested_form").find(".major_category").val()) {
+          $(this).parents(".nested_form").find('.major_expert').attr('disabled', false);
+      } else {
+        $(this).parents(".nested_form").find('.major_expert').attr('disabled', true);
+      }
+      var department = $(this).val();d
+      var major_category_id = $(this).parents(".nested_form").find('.major_category').val();
+      var major_ids = $(this).parents(".nested_form").find('.major_select').val();
+      get_experts(this,major_category_id,major_ids,department)
+  
+    });
+
+    // 选择专家大类
+    $(".major_category").change(function(){
+      $(this).parents(".nested_form").find('.major_num').val('');
+      var data= $(this).parents(".nested_form").find('.major_select').select2({ 
+        theme: 'bootstrap4',
+        language: {
+          noResults: function(params) {
+              return "暂无数据";
+          }
+        }
+      });//获取selectid
+      data.val('').trigger("change");
+      if ($(this).val() && $(this).parents(".nested_form").find(".is_department").val()) {
+          $(this).parents(".nested_form").find('.major_expert').attr('disabled', false);
+      } else {
+        $(this).parents(".nested_form").find('.major_expert').attr('disabled', true);
+      }
+       var that = this; 
+       var major_category_id = $(this).val();
+       var major_ids = $(this).parents(".nested_form").find('.major_select').val();
+       var department = $(this).parents(".nested_form").find('.is_department').val();
+       // 获取专家专业
+       $.ajax({
+         url: '/admin/projects/get_category_id?major_category_id='+ major_category_id,
+         context: 'json',
+         type: 'GET',
+        success: function(data){
+          if (data.success) {
+            var str =""
+            $.each(data.majors,function(i,v){
+            str += "<option value='" + v[1]+ "'>" +v[0]+ "</option>"  
+            });
+            $(that).parents(".nested_form").find('.major_select').html(str)
+          }else { 
+            $(that).parents(".nested_form").find('.major_select').html('')
+             console.log("未找到该大类下的专家专业");
+          }
+        }
+      });
+    });
+
+
+
+    $(".major_select").change(function(){
+       var major_ids = $(this).val();
+       var major_category_id = $(this).parents(".nested_form").find('.major_category').val();
+       var department = $(this).parents(".nested_form").find('.is_department').val();
+       get_experts(this,major_category_id,major_ids,department)
+    })
+})
+
+
+function get_experts(that,major_category_id,major_ids,department){
+  // 先清空选项
+  var major_expert_data = $(that).parents(".nested_form").find('.major_expert').select2({ 
+    theme: 'bootstrap4',
+    language: {
+      noResults: function(params) {
+          return "暂无数据";
+      },
+       maximumSelected: function(n){
+         return"最多只能选择"+n.maximum+"个选项";
+       }
+    }
+  });//获取selectid
+  major_expert_data.val('').trigger("change");
+  $(that).parents(".nested_form").find('.major_num').val('') 
+   $.ajax({
+     url: '/admin/projects/get_experts_ids',
+     data: {
+       major_category_id: major_category_id,
+       major_ids: major_ids,
+       is_department: department 
+     },
+     context: 'json',
+     type: 'GET',
+    success: function(data){
+      if (data.success) {
+        var str =""
+        $.each(data.experts,function(i,v){
+        str += "<option value='" + v[1]+ "'>" +v[0]+ "</option>"  
+        });
+        $(that).parents(".nested_form").find('.major_expert').html(str)
+      }else { 
+       $(that).parents(".nested_form").find('.major_expert').html('')
+        toastr['error']('没有符合要求的专家!',"<%= notice_tip('error') %>");
+      }
+    }
+  });
+}
+
+function toggleAdd(flag){
+  if(flag){
+    return $(".add_major_form").show();
+  }
+  var total_num = parseInt($('.total_num').val());
+  var sum = 0;
+  $('.major_num:visible').each(function(i,e){
+      sum += parseFloat($(e).val() || 0 )
+  })
+  if(sum >= total_num ){
+    $(".add_major_form").hide();
+  }else{
+    $(".add_major_form").show();
+  }
+}
+
+
+function setMaxSelect(that){
+  var total_num = parseInt($('.total_num').val());
+  var sum = 0;
+  var thatNum = $(that).parents(".nested_form").find('.major_num')
+  $('.major_num:visible').not(thatNum).each(function(i,e){
+      sum += parseFloat($(e).val() || 0 )
+  })
+  var maxNum = (total_num - sum)
+  $(that).select2({
+      maximumSelectionLength: maxNum,
+      theme: 'bootstrap4',
+      language: {
+        noResults: function(params) {
+            return "暂无数据";
+        },
+        maximumSelected: function(n){
+          return"最多只能选择"+n.maximum+"个选项";
+        }
+      }
+  });
+}
+</script>

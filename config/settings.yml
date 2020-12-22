@@ -1,0 +1,8 @@
+mysql:
+  username: ''
+  password: ''
+  database: ''
+  host: ''
+  
+site_name: '通州区农业项目管理平台'
+is_production: false

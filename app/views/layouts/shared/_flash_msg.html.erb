@@ -1,0 +1,9 @@
+<script type="text/javascript">
+  <% if flash.present? %>
+   toastr['info']("<%= flash[:alert] %>","<%= notice_tip('info') %>")
+  <% end -%>
+
+</script>
+
+
+

@@ -1,0 +1,67 @@
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <div class="d-sm-flex align-items-center justify-content-between mb-4">
+    <h1 class="h3 mb-0 text-gray-800 mt10">工作台</h1>
+  </div>
+<% if current_user.admin? %>
+  <%= render 'stats' %>
+<% end %>
+<%= render 'tasks' unless current_user.admin? %>
+  <div class="row">
+
+    <!-- Content Column -->
+    <div class="col-lg-12 mb-4">
+
+      <!-- Project Card Example -->
+      <div class="card shadow mb-4">
+        <div class="card-header py-3">
+          <h6 class="m-0 font-weight-bold text-primary">
+          项目进度 
+          <ul class="nav float-right ">
+            <li class="nav-item">
+              <%= fa_icon_tag 'square text-success' %>
+              正常
+            </li>
+            <li class="nav-item">
+              <%= fa_icon_tag 'square text-warning' %>
+              预警
+            </li>
+            <li class="nav-item">
+              <%= fa_icon_tag 'square text-danger' %>
+              超时
+            </li>
+          </ul>
+          </h6>
+         
+        </div>
+        <div class="card-body">
+          <% false && @projects.each do |project| %>
+            <h4 class="small font-weight-bold"><%= link_to_blank project.name, admin_project_path(project) , class: 'text-gray-600' %> 
+              <span class="float-right">
+                <% if  project.warning_weight.presence  && project.plan_completion_at.presence && project.plan_completion_at >= Time.now   %>
+                  <%= fa_icon_tag 'exclamation-triangle  text-danger' %>
+                  <% days =  ((project.plan_completion_at.to_date) - (Time.now.to_date)).to_i %>
+                  当前进度完成<%= project.progress %>%,距计划完成时间还剩 <%= days %>天！
+                <% else %>
+                  <%= project.progress %> %
+                <% end %>
+              </span>
+            </h4>
+            <div class="progress mb-4">
+              <% color = project.warning_weight.presence ? (project.plan_completion_at < Time.now  ?  'bg-danger' : 'bg-warning')  : 'bg-success' %>
+              <div class="progress-bar <%= color %> " role="progressbar" style="width:<%=  project.progress %>%;" aria-valuenow="<%=  project.progress %>" aria-valuemin="<%=  project.progress %>" aria-valuemax="100"><%= project.progress %>%</div>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- /.container-fluid -->
+<style type="text/css">
+  .card-body {
+      min-height: 1px;
+  }
+</style>

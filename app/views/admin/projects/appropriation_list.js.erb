@@ -1,0 +1,8 @@
+var d = dialog({
+  id: 'appropriation_list_dialog',
+  title: '已拨付列表',
+  content: "<%= j(render partial: 'appropriation_list')  %>",
+  cancelValue: '关闭',
+  cancel: function () {}
+});
+d.showModal();

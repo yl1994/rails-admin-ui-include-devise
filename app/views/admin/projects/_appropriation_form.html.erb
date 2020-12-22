@@ -1,0 +1,41 @@
+<% url ||= appropriation_do_admin_project_path(back: request.fullpath)  %>
+<%= form_for [:admin,  @appropriation] ,url: url, remote: true,  method: :post, html: {class: 'valid_engine',id:'appropriation_form'} do |f| %>
+   <div class="form-group row justify-content-start align-items-center">
+     <div class="col-sm-3 text-right">
+      <label class="col-form-label">已拨付金额(元)</label>
+     </div>
+     <div class="col-sm-3 ">
+       <%= @project.appropriation_money %>
+     </div>
+   </div>
+
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-3 text-right">
+        <%= require_span %><%= f.label :money,class: 'col-form-label' %>
+      </div>
+      <div class="col-sm-3 ">
+        <%= f.text_field :money,class: 'form-control validate[required] money' ,placeholder:"本次拨付金额" %>
+      </div>
+      <div class="col-sm-3 text-right">
+        <%= require_span %><%= f.label :appropriation_at,class: 'col-form-label'%>
+      </div>
+      <div class="col-sm-3 mb-3 mb-sm-0">
+        <%= f.text_field :appropriation_at,class: "validate[required] form-control flatpickr " %>
+      </div>
+      <%= hidden_field_tag :back_url, params[:back] || admin_projects_path  %>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-3 text-right">
+        <%= f.label :remark,class: 'col-form-label' %>
+      </div>
+      <div class="col-sm-9 ">
+        <%= f.text_area :remark, class: 'form-control' , placeholder:"备注、跟进措施" %>
+      </div>
+    </div>
+<% end -%>
+<script type="text/javascript">
+  $(function(){
+    $("#appropriation_form").validationEngine();
+    flatpickr(".flatpickr");
+  })
+</script>

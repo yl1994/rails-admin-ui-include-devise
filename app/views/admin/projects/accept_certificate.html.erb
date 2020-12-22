@@ -1,0 +1,93 @@
+  <%= render 'accept_certificate'%>
+    <div class="text-center mb-3">
+      <%= link_to_void '审核通过',ctype: "agree", class: "btn btn-primary btn-sm",id: 'accept_certificate' %>
+      <%= link_to_void '审核不通过',ctype: "dis", class: "btn btn-danger btn-sm text-white",id: 'disaccept_certificate' %>
+      <%= link_to_back url: params[:back] || admin_projects_path,size: "btn-secondary btn-sm" %>
+    </div>
+
+<script type="text/javascript">
+  $(function(){
+    // 时间插件
+    flatpickr(".flatpickr");
+    // select2 tag
+    $(".select2_tags").select2({tags: true});
+
+    $("#accept_certificate").click(function(event) {
+      var ctype = $(this).attr("ctype");
+      if(!$("#accept_form").validationEngine("validate")){
+        console.log('form  error')
+        return;
+       }
+      <% if current_user.e_signature.attached? %>
+        var d = dialog({
+          title: '在线签名',
+          content: "<%= j(render partial: 'validate_password')  %>",
+          okValue: '确定',
+            ok: function () {
+              if(!$("#password").val()){
+                alert('请输入当前密码进行验证')
+              }else{
+                $("#old_password").val($("#password").val());
+                $("#ctype").val(ctype);
+                var form = document.querySelector('#accept_form');
+                Rails.fire(form,'submit');
+                $(".ui-dialog-button button[i-id=ok]").attr("disabled",true);
+              } 
+              return false
+            },
+            cancelValue: '取消',
+            cancel: function () {}
+        });
+        d.showModal();
+      <% else %>
+        var d = dialog({
+        title: '上传个人签名',
+        content: "<%= j(render partial: '/admin/home/signature')  %>",
+        okValue: '确定',
+          ok: function () {
+            this.title('提交中…');
+            var form = document.querySelector('#my_info_form');
+            Rails.fire(form,'submit');
+            return false
+          },
+          cancelValue: '取消',
+          cancel: function () {}
+      });
+      d.showModal();
+      <% end %>
+    });
+
+
+    $("#disaccept_certificate").click(function(event) {
+      var ctype = $(this).attr("ctype");
+      if(!$("#accept_form").validationEngine("validate")){
+        console.log('form  error')
+        return;
+       }
+      var d = dialog({
+        title: '审核不通过理由',
+        content: "<%= j(render partial: 'disagree_reason')  %>",
+        okValue: '确定',
+          ok: function () {
+            if(!$("#reason").val()){
+              alert('请输入审核不通过理由!')
+            }else{
+              $("#dis_reason").val($("#reason").val());
+              var form = document.querySelector('#accept_form');
+              $("#ctype").val(ctype);
+              Rails.fire(form,'submit');
+              $(".ui-dialog-button button[i-id=ok]").attr("disabled",true);
+            } 
+            return false
+          },
+          cancelValue: '取消',
+          cancel: function () {}
+      });
+      d.showModal();
+    });
+  })
+
+</script>
+
+
+

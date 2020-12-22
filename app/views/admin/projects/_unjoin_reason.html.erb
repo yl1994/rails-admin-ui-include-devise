@@ -1,0 +1,12 @@
+  <%= form_tag '',id: 'unjoin_from',class: 'valid_engine',method: :get,remote: true do %>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-4 text-right">
+      <%= require_span %><label class="col-form-label">不参与理由</label>
+    </div>
+    <div class="col-sm-8 mb-3 mb-sm-0">
+      <%= text_area_tag :reason,'',class: "form-control form-control-user validate[required]",placeholder:"专家不参与理由"%>
+    </div>
+  </div>
+  <%= hidden_field_tag :expert_id %>
+  <%= hidden_field_tag :type %>
+  <% end %>

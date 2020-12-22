@@ -1,0 +1,34 @@
+<%  project.major_category&.experts.includes(:majors).each do |expert| %>
+  <tr>
+    <td>
+    <%= check_box_tag 'expert_ids[]', expert.id,@project.experts.ids.include?(expert.id)%>
+    </td>
+    <td>
+    <%= expert.name %>
+    </td>
+    <td>
+    <%= expert.phone %>
+    </td>
+    <td>
+    <%= expert.nature %>
+    </td>
+    <td>
+    <%= expert.department_name %>
+    </td>
+    <td>
+    <%= expert.call_title %>
+    </td>
+    <td>
+    <%= expert.position %>
+    </td>
+    <td>
+    <%= badges_tag(expert.majors_funcs_name) %>
+    </td>
+    <td>
+    <%= badges_tag(expert.funcs_name) %>
+    </td>
+    <td>
+    <%= Expert::STATUS[expert.status] %>
+    </td>
+  </tr>
+<% end %>

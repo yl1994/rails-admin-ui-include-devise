@@ -1,0 +1,14 @@
+var d = dialog({
+  title: '选择项目字段导出',
+  content: "<%= j(render partial: 'excel')  %>",
+  okValue: '确定',
+    ok: function () {
+      this.title('提交中…');
+      var form = document.querySelector('#project_form');
+      // Rails.fire(form, 'submit');
+      $('#project_form').submit();
+    },
+    cancelValue: '取消',
+    cancel: function () {}
+});
+d.showModal();

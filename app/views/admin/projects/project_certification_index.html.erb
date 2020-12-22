@@ -1,0 +1,171 @@
+<div class="mt-2">
+  <%= form_for @query, :url => project_certification_index_admin_projects_path, :html => {:method => :get, :class => "well form-search form-inline"}  do |f| %>
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label>名称：</label>
+        <%= f.text_field :name_cont ,class: 'form-control ',placeholder: "名称" %>
+      </div>
+      <div class="col-auto">
+          <label>项目状态：</label>
+          <%= f.select :status_eq, OperationStatus.pluck(:name,:code), {include_blank: '全部'},{class: 'custom-select-fixed-width'} %>
+      </div>
+      <div class="col-auto">
+          <label>验收申请状态：</label>
+          <%= f.select :certification_status_eq, ProjectCertification::STATUS.invert, {include_blank: '全部'},{class: 'custom-select-fixed-width'} %>
+      </div>
+      <div class="col-auto">
+          <label>项目类别：</label>
+         <%= f.select :project_genre_id_eq, ProjectGenre.pluck(:name,:id), {include_blank: '全部'},{class: 'custom-select-fixed-width'} %>
+      </div>
+    </div>
+    <div class="form-row align-items-center mt5">
+      <div class="col-auto">
+          <label>专项：</label>
+          <%= f.select :project_special_id_eq, ProjectSpecial.pluck(:name,:id), {include_blank: '全部'},{class: 'custom-select-fixed-width'} %>
+      </div>
+      <div class="col-auto">
+        <label>承办科室：</label>
+        <%= f.select :department_id_eq, Department.pluck(:name,:id), {include_blank: '全部'},{class: 'custom-select-fixed-width'} %>
+      </div>
+      <div class="col-auto">
+        <label>建设单位：</label>
+        <%= f.text_field :construct_company_name_cont ,class: 'form-control ',placeholder: "建设单位" %>
+      </div>
+      <div class="col-auto">
+        <label>实施单位：</label>
+        <%= f.text_field :implement_unit_cont ,class: 'form-control ',placeholder: "实施单位" %>
+      </div>
+      <%= hidden_field_tag :task_back, params[:task_back]%>
+      <%= render 'admin/shared/search_buttons',total_num:  @query.result.count %>
+    </div>
+  <% end %>
+</div>
+<div class="card-body">
+  <div class="page-header">
+    <%= link_to '返回待办',params[:task_back],class: 'btn btn-secondary btn-sm ' if params[:task_back].present? %>
+  </div>
+  <div class="mt20">
+    <table class="table table-bordered table-sm"  cellspacing="0" data-toggle="table" data-fixed-columns="true"  data-fixed-number="2" data-fixed-right-number="1" data-height= '460' >
+      <thead>
+        <tr>
+          <th class="w80">序号</th>
+          <th class="w300">项目名称</th>
+          <th class="w300" >专项</th>
+          <th class="w150">验收申请状态</th>
+          <th class="w100">项目类别</th> 
+          <th class="w150" >承办科室</th> 
+          <th class="w200">建设单位</th> 
+          <th class="w150">资金来源</th> 
+          <th class="w100">项目总投资(元)</th> 
+          <th class="w100">拟补助金额(元)</th>
+          <th class="w150">立项时间</th> 
+          <th class="w150">计划完成时间</th> 
+          <th class="w150"> 实际完成时间</th> 
+          <th class="w100">完成进度</th> 
+          <th class="w100">已拨付金额(元)</th> 
+          <th class="w100">项目状态</th> 
+          <th class="w200">实施地点</th> 
+          <th class="w200">实施单位</th>
+          <th class="w180">操作</th>
+        </tr>
+      </thead>
+        <tbody>
+          <% @projects.each_with_index do |project, index| %>
+              <tr>
+                <td class="text-center"><%= show_index(index)%></td>
+                <td  >
+                   <%= project.name %>
+                 </td>
+                <td >
+                  <%= project.special_name %>
+                </td>
+                <td >
+                  <%= ProjectCertification::STATUS[project.certification_status].presence || '待发起' %>
+                </td>
+                <td  >
+                 <%= project.project_genre_name %>
+                </td>
+                <td  >
+                 <%= project.department_name %>
+                </td>
+                <td  >
+                 <%= project.construct_company_name %>
+                </td>
+                <td>
+                 <%= project.capital_origin %>
+                </td>
+                <td>
+                 <%= project.total_money %>
+                </td>
+                <td>
+                 <%= project.subsidy_money %>
+                </td>
+                <td>
+                 <%= project.approval_at %>
+                </td>
+                <td>
+                  <%= project.plan_completion_at %>
+                </td>
+                <td>
+                  <%= project.completion_at %>
+                </td>
+                <td>
+                  <%= project.progress %>%
+                </td>
+                <td>
+                  <%= project.appropriation_money %>
+                </td>
+                <td>
+                  <%= project.status_zh %>
+                </td>     
+                <td>
+                  <%= project.implement_site %>
+                </td>
+                <td>
+                  <%= project.implement_unit %>
+                </td>
+
+                <td>
+                  <% show_link = link_to '查看', admin_project_path(project,back: request.fullpath) if can? :show,project  %>          
+                  <% certificate_link = link_to '发起验收申请', certificate_admin_project_path(project, :back => request.fullpath) if (can? :certificate,project) && project.project_certifications.blank? && project.progress.to_i >= 90 %>
+                  <% certification = project.project_certifications.find{|pc| pc.status == 2 }   %>
+                  <% accept_pdf_link = link_to_blank '下载验收申请', url_for(certification.accept_pdf)   if certification&.accept_pdf&.attached?   %>
+                  
+                  <% edit_certificate_link = link_to '修改验收申请', edit_certificate_admin_project_path(project, :back => request.fullpath) if (can? :edit_certificate,project) && project.certification_status == -1 && project.progress.to_i >= 90%>
+                  
+                  <% accept_certificate_link = link_to '验收申请审核', accept_certificate_admin_project_path(project, :back => request.fullpath) if (can? :accept_certificate,project) && project.certification_status == 1 %>
+                  <% if  (project.project_certifications.size == 1 && ([2,-1,1].include? project.project_certifications.last.status) ) || project.project_certifications.size > 1  %>
+                    <% certificate_show_link = link_to '查看验收申请', certificate_show_admin_project_path(project, :back => request.fullpath) if (can? :certificate_show,project) && (project.progress.to_i >= 90) && (project.project_certifications.present?)  %>
+                  <% end %>
+                  <%= operate_buttons([show_link,certificate_show_link,certificate_link,accept_certificate_link,edit_certificate_link,accept_pdf_link].compact) %>
+                </td>
+              </tr>
+            <% end -%>
+          </tbody>
+        </table>
+        <div class="mt10">
+          <%= paginate @projects %>
+        </div>
+     </div>
+</div>
+
+<style type="text/css">
+  .w300 div.th-inner {
+     min-width: 300px !important;
+  }
+  .w200 div.th-inner {
+     min-width: 200px !important;
+  }
+  .w180 div.th-inner {
+     min-width: 180px !important;
+  }
+  .w150 div.th-inner {
+     min-width: 150px !important;
+  }
+  .w100 div.th-inner {
+     min-width: 100px !important;
+  }
+  .w80 div.th-inner {
+     min-width: 80px !important;
+  }
+</style>

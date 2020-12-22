@@ -1,0 +1,14 @@
+<%  reloadony ||= false %>
+<% file_type_childrens.each do |file_type_children |%>
+  <div class="mt20  ml20">
+    <h6 class="m-0 font-weight-bold text-primary font14" data-toggle="" href="#file_type_children_<%= file_type_children.id%>" file_type_children_id="<%= file_type_children.id%>"><%= file_type_children.name %></h6>
+  </div>
+  <div class=""  id="file_type_children_<%= file_type_children.id%>">
+    <div class="ml20 mt10">
+      <%= link_to  '添加', new_project_info_admin_project_path(@project,file_type_children_id: file_type_children.id ),class: 'btn btn-success btn-sm add_project_info', remote: true if (can? :new, Project) && !reloadony  %>
+    </div>
+    <div class=" project_info ml20 mt10" id="project_info-<%= file_type_children.id %>">
+      <%= render 'project_info_list',file_type_children_id: file_type_children.id,reloadony: reloadony  %>
+    </div>  
+  </div>
+<% end %>

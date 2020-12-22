@@ -1,0 +1,25 @@
+<%= form_for @extract_record, :url => extract_experts_do_admin_project_path(@project,type: "extract"), remote: true, :html => {:method => :post, :class => "mt10 valid_engine", :id => "extract_experts_from"}  do |f| %>
+  
+  <div class="form-group row justify-content-start align-items-center w300">
+    <div class="col-6">
+      <%= require_span %><label class="col-form-label">抽取专家总数</label>
+    </div>
+    <div class="col-6 ">
+      <%= text_field_tag :num,nil,class: 'form-control  validate[required,min[1]] total_num'%>
+    </div>
+  </div>
+  <div class="bd-callout bd-callout-info">
+     <h6 class="m-0 font-weight-bold text-primary" data-toggle="collapse">抽取专家明细</h6>
+  </div>
+  <div class="nest_form_user">
+     <%= f.fields_for :extract_details do |extract_detail_form| %>
+      <%= render 'extract_detail_fields', f: extract_detail_form %>
+    <% end %>
+    <%= link_to_add_fields '添加抽取专家明细', f, :extract_details,{},{class: 'btn btn-success btn-sm  mt10 add_major_form'}  %>
+  </div>
+<% end -%>
+<script type="text/javascript">
+$(function() {
+    $("#extract_experts_from").validationEngine();
+})
+</script>

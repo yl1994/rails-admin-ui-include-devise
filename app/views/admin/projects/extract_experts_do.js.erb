@@ -1,0 +1,14 @@
+<% if !@flag %>
+  toastr['error']("<%= flash[:error] %>","<%= notice_tip('error') %>")
+  $(".ui-dialog-button button[i-id=ok]").attr("disabled",false);
+<% else %>
+var partial = "<%= params[:type] == 'extract' ? j(render partial: 'extract_message',locals: {extract_experts: @extract_experts,extract_record:  @extract_record}) : j(render partial: 'experts',locals: {extract_experts: @extract_experts,extract_record:  @extract_record})%>"
+  var d = dialog.get("extract_experts_dialog");
+  d.content(partial);
+  d.title = '专家信息'
+  $("button[i-id='ok']").hide();
+  $("button[i-id='cancel']").click(function(event){
+  	window.location.reload();
+  });
+<% end %>
+$(".ui-dialog-button button[i-id=ok]").text("确定");

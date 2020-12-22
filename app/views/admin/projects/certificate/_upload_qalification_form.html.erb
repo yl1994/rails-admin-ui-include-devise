@@ -1,0 +1,10 @@
+<%= form_for project, :url => upload_qalification_admin_project_path(project,certificate_id: certificate_id), remote: true, :html => {:method => :post, :class => "mt10 valid_engine",id: 'upload_qalification_form'}  do |f| %>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-5 text-right">
+      <label class="col-form-label"><%= require_span %>验收审核资质文件</label>
+    </div>
+    <div class="col-sm-7 mb-3 mb-sm-0">
+      <%= f.file_field :qalification_file  %>
+    </div>
+  </div>
+<% end %>

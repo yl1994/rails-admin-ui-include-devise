@@ -1,0 +1,14 @@
+<div class="card-header py-3">
+  <h6 class="m-0 font-weight-bold text-primary"><%= @role.name%>-分配菜单</h6>
+</div>
+<div class="card-body">
+  <%= link_to_back url: params[:back] %>
+  <%= hidden_field_tag "menus", @menus.to_json %>
+  <%= hidden_field_tag "assign_menus_url", assign_menus_do_admin_role_path(@role) %>
+  
+  <ul id="role_menus_tree" class="ztree" style="width:560px; overflow:auto;"></ul>
+</div>
+
+<%= content_for :js  do %>
+  <%= javascript_pack_tag 'admin/roles/assign_menus' %>
+<% end %>

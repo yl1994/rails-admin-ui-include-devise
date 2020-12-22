@@ -1,0 +1,14 @@
+var d = dialog({
+  title: '资金拨付',
+  content: "<%= j(render partial: 'appropriation_form')  %>",
+  okValue: '确定',
+    ok: function () {
+      this.title('提交中…');
+      var form = document.querySelector('#appropriation_form');
+      Rails.fire(form, 'submit');
+      return false
+    },
+    cancelValue: '取消',
+    cancel: function () {}
+});
+d.showModal();

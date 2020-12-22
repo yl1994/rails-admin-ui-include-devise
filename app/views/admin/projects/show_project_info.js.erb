@@ -1,0 +1,10 @@
+var d = dialog({
+  id: 'show_project_info',
+  title: '查看资料',
+  width: 800,
+  height: 450,
+  content: "<%= j(render partial: 'project_info_form_readonly')  %>",
+    cancelValue: '关闭',
+    cancel: function () {}
+});
+d.showModal();

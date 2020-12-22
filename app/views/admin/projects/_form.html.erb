@@ -1,0 +1,372 @@
+<%= form_for [:admin, @project] , html: {class: 'valid_engine', remote: true,id: 'project_form'} do |f| %>
+<div class="bd-callout bd-callout-info">
+  <h6 class="m-0 font-weight-bold text-primary" data-toggle="collapse" href="#project_basic_form" >基本信息</h6>
+</div>
+<div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :special_name,class: 'col-form-label' %>
+    </div>
+    <div class="col-sm-4 ">
+      <%= f.select :special_name, ProjectSpecial.pluck(:name), {include_blank: '请选择'},{class: 'select2_tags custom-select validate[required]'} %>
+    </div>
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :project_genre_name,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+      <%= f.select :project_genre_name, ProjectGenre.pluck(:name), {include_blank: '请选择'},{class: 'select2_tags custom-select validate[required]'} %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :name,class: 'col-form-label' %>
+    </div>
+    <div class="col-sm-10">
+      <%= f.text_field :name, class: 'form-control validate[required]' ,placeholder:"项目名称、扶持方向" %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :department_id,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+      <%= f.select :department_id, Department.pluck(:name,:id),{include_blank: '请选择'},class: 'custom-select validate[required]'%>
+    </div>
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :construct_company_name,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+      <%= f.text_field :construct_company_name,   class: 'form-control validate[required] ' ,placeholder:"建设单位" %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :total_money,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+      <%= f.text_field :total_money,  class: 'form-control validate[required]' ,placeholder:"项目总投资由资金来源计算得出，无需填写", disabled: true %>
+    </div>
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :subsidy_money,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+      <%= f.text_field :subsidy_money, class: 'form-control validate[required] money' ,placeholder:"拟补助金额" %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :approval_at,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+      <%= f.text_field :approval_at, class: 'form-control flatpickr validate[required]' ,placeholder:"立项时间" %>
+    </div>
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :plan_completion_at,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+      <%= f.text_field :plan_completion_at, class: 'form-control flatpickr validate[required]' ,placeholder:"计划完成时间" %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :progress,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-10 mb-3 mb-sm-0">
+      <% if @project.new_record? %>
+      <%= f.text_field :progress, class: 'form-control slider_percentage' ,placeholder:"项目完成进度",data: {"slider-value" => @project.progress} %>
+      <% else %>
+      <div class="progress" style="width: 80%">
+        <div class="progress-bar bg-success " role="progressbar" style="width:<%=  @project.progress %>%;" aria-valuenow="<%=  @project.progress %>" aria-valuemin="<%=  @project.progress %>" aria-valuemax="100">
+          <%= @project.progress %>%</div>
+      </div>
+      <% end %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :implement_unit,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-10 mb-3 mb-sm-0">
+      <%= f.text_field :implement_unit, class: 'form-control validate[required]' ,placeholder:"实施单位" %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <!-- <div class="col-sm-2 text-right">
+         <%#= require_span %> <%#= f.label :completion_at,class: 'col-form-label'%>
+       </div>
+       <div class="col-sm-4 mb-3 mb-sm-0">
+          <%#= f.text_field :completion_at, class: 'form-control flatpickr validate[required]' ,placeholder:"实际完成时间" %>
+       </div> -->
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :status,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+      <%= f.select :status, OperationStatus.show.pluck(:name,:code), {include_blank: '请选择'},{class: 'form-control custom-select-fixed-width validate[required]' } %>
+    </div>
+    <div class="col-sm-2 text-right">
+      <%= require_span %>
+      <%= f.label :implement_site,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-4 mb-3 mb-sm-0">
+      <%= f.text_field :implement_site, class: 'form-control validate[required]' ,placeholder:"实施地点" %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <%= f.label :remark,class: 'col-form-label'%>
+    </div>
+    <div class="col-sm-10 mb-3 mb-sm-0">
+      <%= f.text_area :remark, class: 'form-control' , placeholder:"备注、跟进措施" %>
+    </div>
+  </div>
+  <div class="form-group row justify-content-start align-items-center">
+    <div class="col-sm-2 text-right">
+      <label class="col-form-label">项目实施位置</label>
+    </div>
+    <div class="col-sm-10 mb-3 mb-sm-0">
+      <%= f.hidden_field :lng %>
+      <%= f.hidden_field :lat %>
+      <div class="map">
+        <div id="container"></div>
+        <div id="pickerBox">
+          <input id="pickerInput" placeholder="输入关键字选取地点" />
+          <div id="poiInfo"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<%= hidden_field_tag :back, params[:back] %>
+<div class="bd-callout bd-callout-info">
+  <h6 class="m-0 font-weight-bold text-primary">资金来源</h6>
+</div>
+<div class="nest_form_capital">
+  <%= f.fields_for :capitals do |capital_form| %>
+  <%=render 'capital_fields', f: capital_form %>
+  <% end %>
+  <%= link_to_add_fields '添加', f, :capitals,{},{class: 'btn btn-success btn-sm ml20 add_capitals'} %>
+</div>
+<div class="w-75 p-3 mx-auto text-center">
+  <p id="demo"></p>
+  <%= f.submit '提交', class: "btn btn-primary " %>
+  <%= link_to_back url: params[:back] || admin_projects_path  %>
+</div>
+<% end -%>
+<% content_for :js do %>
+<script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.9&key=<%=SettingConfig.gaode&.web&.key %>&plugin=AMap.PlaceSearch,AMap.Geocoder"></script>
+<!-- UI组件库 1.0 -->
+<script src="https://webapi.amap.com/ui/1.0/main.js?v=1.0.11"></script>
+<% end %>
+<script type="text/javascript">
+// 地图初始化
+var lnglats = <%= [@project.lng,@project.lat].compact %>;
+if (lnglats.length > 0) {
+  var marker, map = new AMap.Map('container', {
+    zoom: 15,
+    center: lnglats
+
+  });
+} else {
+  var marker, map = new AMap.Map('container', {
+    zoom: 15,
+
+  });
+}
+var geocoder = new AMap.Geocoder({
+  radius: 1000 //范围，默认：500
+});
+
+map.on('click', function(e) {
+  console.log(e.lnglat)
+  console.log(e.lnglat.getLng() + ',' + e.lnglat.getLat())
+  clearMarker();
+  marker = new AMap.Marker();
+  marker.setMap(map);
+  marker.setPosition(e.lnglat);
+  $("#project_lng").val(e.lnglat.lng)
+  $("#project_lat").val(e.lnglat.lat)
+  var infoWindow = new AMap.InfoWindow({
+    offset: new AMap.Pixel(0, -20),
+  });
+  regeoCode(e.lnglat, infoWindow)
+  infoWindow.open(map, marker.getPosition())
+});
+
+// 清除 marker
+function clearMarker() {
+  if (marker) {
+    marker.setMap(null);
+    marker = null;
+  }
+}
+
+
+function regeoCode(lnglat, infoWindow) {
+  infoWindow.setMap(map);
+  infoWindow.setPosition(lnglat);
+  geocoder.getAddress(lnglat, function(status, result) {
+    if (status === 'complete' && result.regeocode) {
+      var address = result.regeocode.formattedAddress;
+      infoWindow.setContent(address);
+    } else {
+      infoWindow.setContent("根据经纬度查询地址失败");
+    }
+  });
+}
+
+
+// 地图选点
+function poiPickerReady(apiKey, poiPicker, map, addressObj) {
+  window.poiPicker = poiPicker;
+  if (lnglats.length > 0) {
+    marker = new AMap.Marker({ location: lnglats });
+    var infoWindow = new AMap.InfoWindow({
+      offset: new AMap.Pixel(0, -20),
+    });
+    marker.setMap(map);
+    infoWindow.setMap(map);
+    marker.setPosition(lnglats);
+    infoWindow.setPosition(lnglats);
+    regeoCode(lnglats, infoWindow)
+    infoWindow.open(map, marker.getPosition())
+    // infoWindow.setContent('详细信息: ' + addressObj.title + " " + addressObj.address);
+    infoWindow.open(map, marker.getPosition());
+  } else {
+    marker = new AMap.Marker();
+    var infoWindow = new AMap.InfoWindow({
+      offset: new AMap.Pixel(0, -20),
+    });
+  }
+
+  //选取了某个POI
+  poiPicker.on('poiPicked', function(poiResult) {
+    var source = poiResult.source,
+      poi = poiResult.item,
+      info = {
+        source: source,
+        id: poi.id,
+        name: poi.name,
+        location: poi.location.toString(),
+        address: poi.address
+      };
+    var data = {
+      key: apiKey,
+      location: poi.location.toString(),
+    }
+    marker.setMap(map);
+    infoWindow.setMap(map);
+    $("#project_lng").val(poi.location.lng)
+    $("#project_lat").val(poi.location.lat)
+    marker.setPosition(poi.location);
+    infoWindow.setPosition(poi.location);
+    infoWindow.setContent('详细信息: ' + info.name + " " + info.address);
+    infoWindow.open(map, marker.getPosition());
+  });
+}
+
+function initMap(addressObj) {
+  AMapUI.loadUI(['misc/PoiPicker'], function(PoiPicker) {
+
+    var poiPicker = new PoiPicker({
+      input: 'pickerInput'
+    });
+
+    //初始化poiPicker
+    poiPickerReady("<%= SettingConfig.gaode&.api&.key %>", poiPicker, map, addressObj);
+  });
+}
+
+
+
+$(function() {
+  initMap(null);
+  var limit_length = $(".nest_form_capital div.nested_form").length - $(".nest_form_capital div.nested_form[style='display: none;']").length
+  if (limit_length == 1) {
+    $("[data-form-remove]").hide();
+  }
+  $(document).on('click', '[data-form-remove]', function(event) {
+    var limit_length = $(".nest_form_capital div.nested_form").length - $(".nest_form_capital div.nested_form[style='display: none;']").length
+    if (limit_length == 1) {
+      $("[data-form-remove]").hide();
+    }
+  })
+
+  $(document).on('click', '.add_capitals', function(event) {
+    var limit_length = $(".nest_form_capital div.nested_form").length - $(".nest_form_capital div.nested_form[style='display: none;']").length
+    if (limit_length > 1) {
+      $("[data-form-remove]").show();
+    }
+  });
+  // validate
+  $("#project_form").validationEngine();
+  // 时间插件
+  flatpickr(".flatpickr");
+  // select2 tag
+  $(".select2_tags").select2({ tags: true, theme: 'bootstrap4' });
+  // 进度条
+  var slider_percentage = $("input.slider_percentage").slider({ min: 0, max: 100, value: 0, focus: true });
+  // 赋默认值
+  $(".slider_percentage").each(function(index, el) {
+    slider_percentage.slider('setValue', $(this).data().sliderValue)
+  });
+  $(document).on('click', '.file_type_root', function(event) {
+    var $this = $(this);
+    if ($this.parent().next('.file_types').attr("class").indexOf('show') == -1) {
+      $.get("<%= get_file_types_admin_projects_path %>", { file_type_id: $(this).attr('file_type_id'), id: "<%= @project.id %>" }, function(data) {
+        $this.parent().next('.file_types').addClass('show').html(data);
+      });
+    } else {
+      $this.parent().next('.file_types').removeClass('show');
+    }
+
+  });
+
+  $(".select2_tags").on("select2:open", function() {
+    $(".select2-search__field").attr("placeholder", "  若选择项没有，可直接填写");
+  });
+  $(".select2_tags").on("select2:close", function() {
+    $(".select2-search__field").attr("placeholder", null);
+  });
+
+  $(document).on('keyup', '.capital_money', function(event) {
+    calculate_total_money();
+  });
+  $(document).on('click', '[data-form-remove]', function(event) {
+    calculate_total_money();
+  })
+})
+
+// 计算项目总投资
+function calculate_total_money() {
+  var sum = 0;
+  $(".capital_money:visible").map(function(i, e) { return sum += parseFloat(e.value || 0) })
+  $("#project_total_money").val(parseFloat(sum).toFixed(2));
+}
+
+</script>
+<style type="text/css">
+.slider.slider-horizontal {
+  width: 80% !important;
+}
+
+.map #pickerBox {
+  position: absolute;
+  z-index: 9999;
+  top: 0px;
+  right: 121px;
+  width: 300px;
+}
+
+</style>

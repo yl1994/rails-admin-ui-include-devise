@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<style type="text/css">
+    body{
+        width: 900px;
+        margin: 0 auto;
+    }
+    .right{
+        text-align: right;
+        background: url("/images/403.png") no-repeat;
+        background-position: 0px 200px;
+        height: 500px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+    .error_msg{
+        font-size: 20px;
+        color: #656565;
+        margin-top: 133px;
+        margin-left: 300px;
+    }
+    .button{
+        margin-top: 20px;
+        margin-left: 300px;
+    }
+    .button button{
+        color: #fff;
+        width: 120px;
+        height: 40px;
+        border-radius: 10px;
+        font-size: 16px;
+        margin-right: 10px;
+    }
+    .goback{
+        background-color: #187aff;
+        border: 1px solid #187aff;
+    }
+    .goindex{
+        background-color: #8a8a8a;
+        border: 1px solid #8a8a8a;
+    }
+</style>
+<script type="text/javascript">
+    function goindex(){
+        parent.location.href="/";
+    }        
+</script>
+<body>
+  <div class="right">
+    <div class="error_msg">抱歉! 您访无权限访问该页面...</div>
+    <div class="button">
+        <button type="button" onclick="history.back(); "  class="goback">返回上一页</button>
+        <button type="button" onclick="goindex()" class="goindex">返回首页</button>
+    </div>
+  </div>
+</body>
+</html>

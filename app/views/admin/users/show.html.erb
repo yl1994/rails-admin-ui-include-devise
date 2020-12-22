@@ -1,0 +1,36 @@
+<div class="card-header py-3">
+  <h6 class="m-0 font-weight-bold text-primary">用户详情</h6>
+</div>
+<div class="w-75 mx-auto my-5">
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold  py-2">真实姓名</div>
+    <div class="col-10 border  py-2"><%= @user.realname %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold  py-2">登录名称</div>
+    <div class="col-10 border  py-2"><%= @user.loginname %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold  py-2">邮箱</div>
+    <div class="col-10 border  py-2"><%= @user.email %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold  py-2">用户身份</div>
+    <div class="col-10 border  py-2">
+      <%= badges_tag(@user.roles_name) %>    
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold  py-2">用户单位</div>
+    <div class="col-10 border  py-2">
+      <%= @user.department_name %>    
+    </div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold py-2">手机号</div>
+    <div class="col-10 border  py-2"><%= @user.phone %></div>
+  </div>
+  <div class="text-center mt-3">
+    <%= link_to_back url: params[:back] || admin_users_path  %>
+  </div>
+</div>

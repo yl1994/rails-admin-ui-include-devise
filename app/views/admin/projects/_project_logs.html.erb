@@ -1,0 +1,48 @@
+ <table class="table table-bordered table-sm ">
+  <thead>
+  <tr>
+    <th class="index">序号</th>
+    <th>操作时间</th>
+    <th>操作人账号</th>
+    <th>操作人姓名</th>
+    <th>内容变更</th>
+  </tr>
+  </thead>
+  <tbody>
+  <% @audits.each_with_index do |audit, index| %>
+      <tr>
+        <td class="tc w100"><%= show_index(index) %></td>
+        <td class="tc"><%= audit.created_at %></td>
+        <td class="tc"><%= audit.user.try(:loginname) %></td>
+        <td class="tc w100"><%= audit.user.try(:realname)  %></td>
+        <td>
+          <table class="table table-bordered table-sm ">
+            <thead>
+              <th>字段</th>
+              <th>修改前</th>
+              <th>修改后</th>
+            </thead>
+            <tbody>
+              <% audit.audited_changes.each do |column,changes| %>  
+                <tr>
+                  <td><%= I18n.t("activerecord.attributes.project.#{column}") %></td>
+                  <% if  /_at$/ =~ column %>
+                    <td><%=  (changes[0]).to_s if changes[0] %></td>
+                    <td><%=  (changes[1]).to_s if changes[1] %></td>
+                  <% else %>
+                    <td><%= change_text(column,changes[0].to_s) %></td>
+                    <td><%= change_text(column,(changes[1]).to_s) %></td>  
+                  <% end %>
+                 
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+  <% end %>
+  </tbody>
+</table>
+<div class="ml20 mt20">
+  <%= paginate @audits %>  
+</div>

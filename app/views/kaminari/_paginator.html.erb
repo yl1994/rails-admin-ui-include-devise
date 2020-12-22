@@ -1,0 +1,70 @@
+<%# The container tag
+  - available local variables
+    current_page:  a page object for the currently displayed page
+    total_pages:   total number of pages
+    per_page:      number of items to fetch per page
+    remote:        data-remote
+    paginator:     the paginator that renders the pagination tags inside
+-%>
+<%= paginator.render do -%>
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <%= first_page_tag unless current_page.first? %>
+      <%= prev_page_tag unless current_page.first? %>
+      <% each_page do |page| -%>
+        <% if page.display_tag? -%>
+          <%= page_tag page %>
+        <% elsif !page.was_truncated? -%>
+          <%= gap_tag %>
+        <% end -%>
+      <% end -%>
+      <% unless current_page.out_of_range? %>
+        <%= next_page_tag unless current_page.last? %>
+        <%= last_page_tag unless current_page.last? %>
+      <% end %>
+      <li class="page-item ml10">
+          <span>共<%= total_pages%>页</span>
+      </li>
+      <li class="page-item">
+          <span class="dou">，</span>
+      </li>
+       <li class="page-item">
+        <span>
+          到第<input type="text" id="go_to_page" onkeyup="this.value=this.value.replace(/[^0-9]/g,'');" max="<%= total_pages%>" value="<%= current_page%>" >页
+        </span>
+      </li>
+      <li class="page-item ml10"><%= link_to "跳转", first_page_tag.url, :remote => remote,class: "go_to_href jump_page webpage_jumping"%></li>
+    </ul>
+    
+  </nav>
+<% end -%>
+<style type="text/css">
+.pagination{
+    align-items: center;
+}
+.pagination input {
+    height: 29px;
+    width: 30px;
+    padding: 0px 2px;
+    border: 1px solid #dbdbdb;
+    text-align: center;
+    color: #333333;
+    margin: 0 5px;
+    position: relative;
+    bottom: 2px;
+}
+
+.webpage_jumping{
+    float: none!important;
+    border: 1px solid #dddddd!important;
+    padding: 6px 12px!important;
+}
+.webpage_jumping:hover{
+    text-decoration: none;
+    background-color: #eaecf4;
+    border-color: #dddfeb;
+}
+.ml10{
+  margin-left: 10px;
+}
+</style>

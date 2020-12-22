@@ -1,0 +1,168 @@
+<div>
+  <h4 class="title">南通市通州区农业项目验收申请表</h4>
+</div>
+    <div class="subtitle">
+      <div class="w-50">
+        承办科室:<%= project_certification&.department_name %>
+      </div>
+      <div class="w-50 tr">
+        申请时间:<%= project_certification&.apply_at&.strftime("%Y年%m月%d日") %>
+      </div>
+    </div>
+
+    <table class="table_form mb20" cellpadding="0" cellspacing="0" id='accept_form'>
+    <tr>
+      <td class="tc w-7 b">
+        项目名称
+      </td>
+      <td class="w-56">
+        <%= project_certification&.project_name %>
+      </td>
+      <td class="tc w-7 b">
+        实施单位
+      </td>
+      <td class="w-36">
+        <%= project_certification&.construct_company_name %>
+      </td>
+    </tr>
+    <tr>
+      <td class="tc w-7 b h-200">
+        验收依据
+      </td>
+      <td colspan="3" class="h-200">
+        <%= raw project_certification&.basis %>
+      </td>
+    </tr>
+     <tr>
+      <td class="tc w-7 b h-400">
+        主要验收内容
+      </td>
+      <td colspan="3" class="h-400">
+        <%= raw project_certification&.content %>
+      </td>
+    </tr>
+       <tr>
+      <td class="tc w-7 b h-300">
+        验收建议
+      </td>
+      <td colspan="3" class="h-300">
+        <div class="mb20 h-100"><%= raw project_certification&.advice %></div>
+        <div class="mb20 subtitle">
+        <div class="w-50">
+          验收方式:
+       <%= ProjectCertification::ACCEPTANCETYPE[project_certification&.acceptance_type] %>
+        </div>
+        <div class="w-50">
+          资金来源:
+          <%=  project&.capital_origin %>
+        </div>
+    </div>
+        <div class="mb20">
+         拟验收时间:
+         <%= project_certification&.acceptance_at&.strftime("%Y年%m月%d日") %>
+       </div>
+       <div class="subtitle mb20">
+         <div class="w-50 subtitle">
+            承办科室负责人:   <%= wicked_pdf_image_tag  project_certification&.apply_user&.e_signature&.service_url ,size: 150 ,style: ' vertical-align: middle;' if project_certification&.apply_is_sign %>
+         </div>
+          <div class="w-50 subtitle">分管领导:  <%= wicked_pdf_image_tag  project_certification&.audit_user&.e_signature&.service_url ,size: 150 ,style: ' vertical-align: middle;' if project_certification&.audit_is_sign %></div>
+       </div>
+       <div class="mb20 tr mr50"><%= project_certification&.audit_at&.strftime("%Y年%m月%d日") %></div>
+      </td>
+    </tr>
+    </table>
+<style type="text/css">
+  .tc{
+    text-align: center;
+  }
+  .tr{
+    text-align: right;
+  }
+  .mb20{
+    margin-bottom: 20px;
+  }
+  .mr50{
+    margin-right: 50px;
+  }
+  .w-7{
+    width:7%;
+  }
+  .w-56{
+    width: 56%;
+  }
+  .w-30{
+    width: 30%;
+  }
+  .w-50{
+    width: 50%;
+  }
+    .h-100{
+    height: 100px;
+  }
+  .h-200{
+    height: 200px;
+  }
+  .h-400{
+    height: 400px;
+  }
+  .h-300{
+    height: 300px;
+  }
+  .b{
+    font-weight: bold;
+  }
+  .title{
+    text-align: center;
+    font-size: 20px;
+    color: #000;
+  }
+  .subtitle{
+    display: flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 14px;
+    color: #333;
+  }
+  .table_form{
+    font-size: 16px;
+    border: 1px solid #333;
+    border-bottom: 0;
+    border-right: 0;
+    color: #333;
+    margin-top: 20px;
+    width: 100%;
+  }
+  .table_form td{
+    border-right: 1px solid #333;
+    border-bottom: 1px solid #333;
+    padding: 10px;
+  }
+  .btn_wrap{
+     display: flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    justify-content: center;
+    align-items: center;
+  }
+  .btn{
+    width: 100px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    background-color: #187aff;
+    color: #fff;
+    border: 0;
+    border-radius: 4px;
+    text-decoration: none;
+    cursor: pointer;
+    margin-left: 30px;
+  }
+  .btn-secondary{
+    background-color: #a8a9a9;
+  }
+</style>
+

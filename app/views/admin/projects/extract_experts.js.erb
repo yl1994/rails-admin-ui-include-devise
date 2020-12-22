@@ -1,0 +1,44 @@
+ var title = "<%= params[:type] == 'extract' ? '抽取专家' : '选择专家' %>"
+var partial = "<%= params[:type] == 'extract' ? j(render partial: 'extract_experts') : j(render partial: 'chose_experts')%>"
+
+var d = dialog({
+  width: 1000,
+  id: 'extract_experts_dialog',
+  title: title,
+  content: partial,
+  okValue: '确定',
+    ok: function () {
+      if(!$("#extract_experts_from").validationEngine("validate")){
+        console.log('form  error')
+        return false;
+       }
+      var total_num = parseInt($('.total_num').val());
+      var sum = 0;
+      $('.major_num:visible').each(function(i,e){
+          sum += parseInt($(e).val() || 0 )
+      })
+      if(total_num && sum == 0){
+        toastr['error']("请添加抽取专家明细","<%= notice_tip('error') %>")
+        return false
+      }
+
+      if(total_num && (total_num != sum)){
+        toastr['error']("专家数量累计必须正好等于抽取总数","<%= notice_tip('error') %>")
+        return false
+      }
+      var form = document.querySelector('#extract_experts_from');
+      if("<%= params[:type]%>" == 'extract'){
+        $(".ui-dialog-button button[i-id=ok]").attr("disabled",true).text("抽取中...");
+        setTimeout(function () {
+          Rails.fire(form, 'submit');
+        }, 2000);
+      }else{
+         $(".ui-dialog-button button[i-id=ok]").attr("disabled",true);
+        Rails.fire(form, 'submit');
+      }   
+      return false
+    },
+    cancelValue: '关闭',
+    cancel: function () {}
+});
+d.showModal();

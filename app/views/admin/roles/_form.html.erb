@@ -1,0 +1,21 @@
+<%= form_for [:admin, @role] ,html: {class: 'valid_engine'} do |f| %>
+  <div class="w-75 px-3 mx-auto">
+    <div class="d-flex justify-content-start align-items-center">
+      <%= require_span %> <%= f.label :name,class: 'col-sm-2 col-form-label' %>
+      <%= f.text_field :name,class: 'form-control validate[required]' %>
+    </div>
+    <div class="pt-3 d-flex justify-content-start align-items-center">
+      <%= require_span %> <%= f.label :code,class: 'col-sm-2 col-form-label' %>
+      <%= f.text_field :code,class: 'form-control validate[required]' %>
+    </div>
+  </div>
+ <div class="w-75 px-3 mx-auto pt-3 d-flex justify-content-start align-items-center">
+   <%= f.label :desc,class: 'col-sm-2 col-form-label ml-2' %>
+    <%= f.text_area :desc,class: 'form-control ' %>
+</div>
+ 
+  <div class="w-75 p-3 mx-auto text-center">
+    <%= f.submit '提交', class: "btn btn-primary" %>
+    <%= link_to_back url: params[:back] || admin_roles_path(@role) %>
+  </div>
+<% end -%>

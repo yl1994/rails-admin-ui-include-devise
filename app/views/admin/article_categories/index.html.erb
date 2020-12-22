@@ -1,0 +1,50 @@
+<div class="mt-4">
+  <%= form_for @query, :url => admin_article_categories_path, :html => {:method => :get, :class => "well form-search form-inline"}  do |f| %>
+    <div class="form-row align-items-center">
+      <div class="col-auto">
+        <label>名称：</label>
+        <%= f.text_field :name_cont,class: 'form-control ',placeholder: "名称"  %>
+      </div>
+      <%= render 'admin/shared/search_buttons',total_num:  @query.result.count %>
+    </div>
+  <% end %>
+</div>
+
+<div class="card-body">
+  <div class="page-header">
+    <%= link_to '新增文章分类',new_admin_article_category_path(format: 'js', :back => request.fullpath),remote: true,class: 'btn btn-primary btn-sm ' if can? :new, ArticleCategory %>
+  </div>
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="w80">序号</th>
+          <th class="w100">名称</th>
+          <th class="w100">文章分类描述</th>
+          <th class="w100">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%@article_categories.each_with_index do |category, index| -%>
+          <tr id="<%= category.id %>">
+            <td class="textc"><%= index + 1 %></td>
+            <td><%=category.try(:name)%></td>
+            <td><%=category.try(:remark)%></td>
+            <td class="textc">
+              <% edit_link = link_to'修改',edit_admin_article_category_path(category, :back => request.fullpath), :class => "edit_category dropdown-item",remote: true  if can? :edit,category %>
+              <% destroy_link = link_to '删除', admin_article_category_path(category, :back => request.fullpath), :method => :delete, data: { confirm: '确认要刪除吗?' } if can? :destroy,category %>
+              <%= operate_buttons([edit_link, destroy_link].compact) %>
+          </tr>
+        <% end -%>        
+      </tbody>
+    </table>
+    <%= paginate @article_categories %>
+  </div>
+</div>
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <%= render 'form' %>
+        </div>
+    </div>
+</div>

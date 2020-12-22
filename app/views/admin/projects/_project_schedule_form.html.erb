@@ -1,0 +1,142 @@
+<%= form_for [:admin,  @project_schedule] ,url: project_schedule_do_admin_project_path(back: request.fullpath), remote: true,  method: :post, html: {class: 'valid_engine',id:'project_schedule_form'} do |f| %>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <%= require_span %><%= f.label :progress,class: 'col-form-label' %>
+      </div>
+      <div class="col-sm-10 ">
+        <%= f.text_field :progress,class: "form-control w100 d-inline-flex validate[required,custom[integer],min[#{@project_schedule.progress}],max[100]] money" ,placeholder:"进度" %> %
+      </div>
+      <%= hidden_field_tag :back_url, params[:back] || admin_projects_path  %>
+    </div>
+
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <%= require_span %><%= f.label :schedule_at,class: 'col-form-label' %>
+      </div>
+      <div class="col-sm-4 ">
+        <%= f.text_field :schedule_at,class: "validate[required] form-control flatpickr " ,placeholder:"调整时间" %>
+      </div>
+    </div>
+    
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <%= f.label :remark,class: 'col-form-label' %>
+      </div>
+      <div class="col-sm-10 ">
+        <%= f.text_area :remark, class: 'form-control' , placeholder:"备注" %>
+      </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="text-danger ml100">
+         注：点击选择文件后 未选择文件将会清空所有待上传的文件
+      </div>
+    </div>
+    <div class="form-group row justify-content-start align-items-center">
+      <div class="col-sm-2 text-right">
+        <label class="col-form-label">进度资料</label>
+      </div>
+      <div class="col-sm-10">
+        <%= f.file_field :files, multiple: true, direct_upload: true %>
+      </div>
+    </div>
+<% end -%>
+<script type="text/javascript">
+  $(function(){
+    $("#project_schedule_form").validationEngine();
+    flatpickr(".flatpickr");
+    $('#project_schedule_files').fileinput({
+        uploadUrl: '#',
+        showUpload: false, //是否显示文件上传按钮
+        showRemove: false, //是否显示移除按钮
+        showClose: false, // 是否显示关闭按钮
+        layoutTemplates: {
+           actionUpload: '',
+        },//渲染布局每部分的模板配置
+        previewFileIconSettings: {
+             'docx': '<i ass="fa fa-file-word text-primary"></i>',
+             'doc': '<i ass="fa fa-file-word text-primar"></i>',
+             'xlsx': '<i class="fa fa-file-excel text-success"></i>',
+             'xls': '<i class="fa fa-file-excel text-success"></i>',
+             'pptx': '<i class="fa fa-file-powerpoint text-danger"></i>',
+             'ppt': '<i class="fa fa-file-powerpoint text-danger"></i>',
+         
+         },//对象每个文件扩展名（类型）的预览图标标记设置
+        overwriteInitial: false, //否要覆盖初始预览内容和标题设置
+        initialPreviewAsData: true, //是否将初始预览内容集解析为数据而不是原始标记语言
+        initialPreview: <%= raw(@initial_previews.presence || [] )  %> , //字符串或者数组，要显示的初始预览内容
+        initialPreviewConfig: <%=  raw(@initial_preview_configs.presence || [] )  %>, //设置重要属性的配置。
+        deleteUrl: '/delete_attachment',
+        theme: 'explorer-fas', //主图
+        language: 'zh', // 语言
+    }).on('filebatchselected', function(event,files) {
+      var old_files = $('#project_schedule_files').fileinput('getFileList');
+      var input = $('#project_schedule_files')[0];
+      var data = new DataTransfer();
+      // 先找到历史选择的文件
+      for(var i=0;i<old_files.length;i++){
+        data.items.add(old_files[i]);
+      }
+      //重新组装input fileList
+      input.files = data.files;
+    })
+    .on('fileselectnone', function(event) {
+      $(".file-preview .file-preview-thumbnails .kv-preview-thumb:not('.file-preview-initial')").find('.kv-file-remove').click();
+    }).on('filebeforedelete', function() {
+        var aborted = window.confirm('确定删除原文件吗? 删除后不可恢复');
+        return !aborted
+    })
+    // activestorage  上传文件进度条
+    addEventListener("direct-upload:initialize", event => {
+      const { target, detail } = event;
+      const { id, file } = detail;
+      var index;
+      for(var i=0;i<target.files.length;i++){
+            if(file == target.files[i]){
+              index = i
+            }
+        }
+      if($(".file-preview .file-preview-thumbnails .kv-preview-thumb:not('.file-preview-initial'):eq("+(index)+") .file-details-cell:visible .explorer-caption").parent('div.file-details-cell').find("#direct-upload-"+id).length == 0){
+        $(".file-preview .file-preview-thumbnails .kv-preview-thumb:not('.file-preview-initial'):eq("+(index)+") .file-details-cell:visible .explorer-caption").parent('div.file-details-cell').append(`<div id="direct-upload-${id}" class="progress ">
+            <div id="direct-upload-progress-${id}"  class="progress-bar  progress-bar-zero" role="progressbar" style="width:0%;" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"><div class="progress-bar-default">待上传</div></div>
+          </div>`)
+      }
+    });
+
+    addEventListener("direct-upload:start", event => {
+      const { id } = event.detail;
+      const element = document.getElementById(`direct-upload-${id}`);
+      const progressElement = document.getElementById(`direct-upload-progress-${id}`); 
+    });
+
+    addEventListener("direct-upload:progress", event => {
+      const { id, progress } = event.detail;
+      const progressElement = document.getElementById(`direct-upload-progress-${id}`);
+      progressElement.style.width = `${progress}%`;
+      progressElement.setAttribute('aria-valuenow',progress);
+      progressElement.textContent = `${progress.toFixed(0)}%`;
+      progressElement.classList.remove("progress-bar-zero");
+    });
+
+    addEventListener("direct-upload:error", event => {
+      event.preventDefault();
+      const { id, error } = event.detail;
+      const element = document.getElementById(`direct-upload-${id}`);
+      const progressElement = document.getElementById(`direct-upload-progress-${id}`);
+      progressElement.classList.remove("bg-success");
+      progressElement.classList.add("bg-danger");
+      element.setAttribute("title", error);
+    });
+
+    addEventListener("direct-upload:end", event => {
+      const { id } = event.detail;
+      const element = document.getElementById(`direct-upload-${id}`);
+    });
+  })
+</script>
+
+<style type="text/css">
+  .file-drop-zone {
+    height: 270px;
+    overflow: auto;
+  }
+</style>

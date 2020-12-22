@@ -1,0 +1,21 @@
+<div class="card-header py-3">
+  <h6 class="m-0 font-weight-bold text-primary">角色详情</h6>
+</div>
+<div class="w-75 mx-auto my-5">
+  <div class="row mt-2">
+    <div class="col-1 font-weight-bold  py-2">名称</div>
+    <div class="col-11 border  py-2"><%= @role.name %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-1 font-weight-bold  py-2">编码</div>
+    <div class="col-11 border  py-2"><%= @role.code %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-1 font-weight-bold py-2">描述</div>
+    <div class="col-11 border  py-2"><%= @role.desc %></div>
+  </div>
+  <div class="text-center mt-3">
+    <%= link_to_back url: params[:back] || admin_roles_path  %>
+  </div>
+</div>
+

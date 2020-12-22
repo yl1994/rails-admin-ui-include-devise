@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= SettingConfig.site_name  %></title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= stylesheet_pack_tag 'auth' %>
+    <%= javascript_pack_tag 'auth' %>
+  </head>
+
+  <body>
+    <%= render 'layouts/shared/flash_msg' %>
+    <div class="login_head">
+        <div class="head_mid_login">
+            <a href="javascript:;">
+                <%= image_pack_tag 'media/img/logo.png',class: 'login_img',width: '440',height: '50' %>
+            </a>
+        </div>
+    </div>
+    <div class="login_main">
+      <%= yield %>
+    </div>
+    <div class="login_footer">
+        <ul class="footer_top clearfix">
+            <li class="fl clearfix">
+                <i class="location fl"></i>
+                通州区农业农村局
+            </li>
+            <li class="fl clearfix">
+                <i class="tel fl"></i>
+                客服热线：0513-89072079 0513-89070376
+            </li>
+            <li class="fl clearfix">
+                <i class="time fl"></i>
+                工作时间：工作日8:30-17:30
+            </li>
+            <li class="fl">技术支持：江苏阳光公采网络有限公司</li>
+        </ul>
+        <div class="footer_bottom">
+            江苏阳光公采网络有限公司 版权所有  |  <a href="javascript:;">苏ICP备17022235号</a>
+        </div>
+    </div>
+  </body>
+</html>

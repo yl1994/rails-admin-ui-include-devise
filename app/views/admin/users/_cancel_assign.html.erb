@@ -1,0 +1,38 @@
+<div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary" id="myModalLabel">请分配科室</h6>
+</div>
+<% if @departments %>
+<%= form_for @user, :url => cancel_assign_do_admin_user_path(@user), remote: true, :html => {:method => :post, :class => "mt10 valid_engine", :id => "cancel_assign_from"}  do |f| %>
+<div class="table-responsive mt-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th class="w100">选择科室</th>
+                <th class="w100">科室名称</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%= f.collection_check_boxes(:department_ids, @departments, :id, :name) do |b| %>
+            <tr>
+                <td>
+                    <%= b.check_box %>
+                </td>
+                <td>
+                    <%= b.label %>
+                </td>
+            </tr>
+            <% end %>
+        </tbody>
+    </table>
+</div>
+<div class="w-75 p-3 mx-auto text-center">
+    <%= f.submit '提交', class: "btn btn-primary" %>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+</div>
+<% end -%>
+<% end -%>
+<script type="text/javascript">
+$(function() {
+    $("#cancel_assign_from").validationEngine();
+})
+</script>

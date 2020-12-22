@@ -1,0 +1,32 @@
+<div class="row">
+  <div class="col-lg-12 mb-4">
+    <div class="card mb-3">
+      <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">待办事项</h6>
+      </div>
+      <div class="card-body">
+        <div>
+          <%= link_to project_certification_index_admin_projects_path("q[certification_status_eq]" => 1,task_back: request.fullpath ),class: 'font14 text-info' do  %>
+            项目验收待审核 <span class="badge badge-danger"><%= @cert_count %></span>
+          <% end if can? :accept_certificate, Project %>
+        </div>
+        <div>
+          <%= link_to project_certification_index_admin_projects_path("q[certification_status_eq]" => -1,task_back: request.fullpath ),class: 'font14 text-info' do  %>
+            项目验收审核不通过 <span class="badge badge-danger"><%= @check_cert_count%></span>
+          <% end if can? :edit_certificate, Project %>
+        </div>
+        <div>
+          <%= link_to admin_tz_articles_path("q[status_eq]" => 1,task_back: request.fullpath ),class: 'font14 text-info' do  %>
+            公告待审核 <span class="badge badge-danger"><%= @tz_article_count%></span>
+          <% end if can? :audit, TzArticle %>
+        </div>
+         <div>
+          <%= link_to admin_tz_articles_path("q[status_eq]" => 3,task_back: request.fullpath ),class: 'font14 text-info' do  %>
+            公告审核不通过 <span class="badge badge-danger"><%= @audit_not_count%></span>
+          <% end if current_user.has_role?(:admin_operator) %>
+        </div>  
+
+      </div>
+    </div>
+  </div>
+</div>

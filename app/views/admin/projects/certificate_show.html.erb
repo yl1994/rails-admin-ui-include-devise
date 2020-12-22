@@ -1,0 +1,208 @@
+<h6 class="m-0 font-weight-bold text-primary">
+ <%= link_to_back url: params[:back] || admin_projects_path  %> </h6>
+  <div class="mx-3 mt-4">
+    <h4 class="title">南通市通州区农业项目验收申请表  (<%= ProjectCertification::STATUS[@accept&.status] %>)
+    </h4>
+  </div>
+  <div class="subtitle mx-3">
+    <div>
+      承办科室:<%= @accept&.department_name %>
+    </div>
+    <div>
+      申请时间:<%= @accept&.apply_at&.strftime("%Y年%m月%d日") %>
+    </div>
+  </div>
+  <table class="table_form mx-3 mb-3" cellpadding="0" cellspacing="0" id='accept_form'>
+    <tr>
+      <td class="tc w-8 b">
+        项目名称
+      </td>
+      <td class="w-42 tl">
+        <%= @accept&.project_name %>
+      </td>
+      <td class="tc w-8 b">
+        实施单位
+      </td>
+      <td class="w-42 tl">
+        <%= @accept&.construct_company_name %>
+      </td>
+    </tr>
+    <tr>
+      <td class="tc w-8 b">
+        验收依据
+      </td>
+      <td colspan="3" class="tl">
+        <%= raw @accept&.basis %>
+      </td>
+    </tr>
+    <tr>
+      <td class="tc w-8 b">
+        主要验收内容
+      </td>
+      <td colspan="3" class="tl">
+        <%= raw @accept&.content %>
+      </td>
+    </tr>
+    <tr>
+      <td class="tc w-8 b">
+        验收建议
+      </td>
+      <td colspan="3" class="tl">
+          <div class="mb-3 subtitle">
+            <div class="w-50">
+              验收方式:
+              <%= ProjectCertification::ACCEPTANCETYPE[@accept&.acceptance_type] %>
+            </div>
+            <div class="w-50">
+              资金来源:
+              <%= @project&.capital_origin %>
+            </div>
+          </div>
+          <div class="mb-3">
+            拟验收时间:
+            <%= @accept&.acceptance_at&.strftime("%Y年%m月%d日") %>
+          </div>
+          <div class="subtitle mb-3">
+          <div class="w-50">
+            承办科室负责人:
+            <%= @accept&.apply_user_name %>
+          </div>
+          <div class="w-50">
+            分管领导:
+            <% if  (can? :upload_qalification,@project) &&  @accept&.status == 1 %>
+              <%= link_to_void '线下验收审核资质上传', class: 'upload_qalification'%>
+            <% else %>
+              <% if @accept.qalification_file.attached? %>
+                <%= link_to_blank '验收审核资质', @accept.qalification_file.service_url %>
+              <% else %>
+                <%= @accept&.audit_user_name %>
+              <% end %>
+            <% end %>
+          </div>
+        </div>
+        <div class="mb20 tr mr50">
+          <%= @accept&.audit_signed_at&.strftime("%Y年%m月%d日") %></div>
+      </td>
+    </tr>
+  </table>
+
+<div class="table-responsive mt-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+       <thead>
+            <tr>
+                <th class="w80">序号</th>
+                <th class="w100">项目操作人姓名</th>
+                <th class="w100">审核时间</th>
+                <th class="w100">审核状态</th>
+                <th class="w100">审核不通过理由</th>
+            </tr>
+        </thead>
+          <tbody>
+              <% @records.each_with_index do |record, index| -%>
+              <tr id="<%= record.id %>">
+                  <td class="textc">
+                      <%= index + 1 %>
+                  </td>
+                  <td>
+                      <%= record.apply_user_name %>
+                  </td>
+                  <td>
+                      <%= record.apply_at.strftime("%Y年%m月%d日") %>
+                  </td>
+                  <td>
+                      <%= ProjectCertification::STATUS[record.status] %>
+                  </td>
+                  <td>
+                      <%= record.reason %>
+                  </td>
+              </tr>
+              <% end -%>
+          </tbody>
+    </table>
+</div>
+
+
+
+
+  <%= hidden_field_tag :back_url, params[:back] || admin_projects_path  %>
+
+
+
+<style type="text/css">
+  .tc{
+    text-align: center;
+  }
+  .tr{
+    text-align: right;
+  }
+  .tl{
+    text-align: left;
+  }
+  .mr50{
+    margin-right: 50px;
+  }
+  .w-8{
+    width: 8%;
+  }
+  .w-42{
+    width: 42%;
+  }
+  .w-50{
+    width: 50%;
+  }
+  .b{
+    font-weight: bold;
+  }
+  .title{
+    text-align: center;
+    font-size: 20px;
+    color: #000;
+  }
+  .subtitle{
+    display: flex;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+  }
+  .table_form{
+    font-size: 16px;
+    border: 1px solid #333;
+    border-bottom: 0;
+    border-right: 0;
+    color: #333;
+    margin-top: 20px;
+  }
+  .table_form td{
+    border-right: 1px solid #333;
+    border-bottom: 1px solid #333;
+    padding: 10px;
+  }
+ 
+</style>
+
+<script type="text/javascript">
+  $(function(){
+    $('.upload_qalification').click(function(event) {
+      /* Act on the event */
+      var d = dialog({
+        id: 'upload_qalification',
+        title: '验收审核资质文件上传',
+        content: "<%= j(render partial: 'admin/projects/certificate/upload_qalification_form',locals: {certificate_id: @accept.id,project: @project })  %>",
+        okValue: '确定',
+          ok: function () {
+            var form = document.querySelector('#upload_qalification_form');
+            $(".ui-dialog-button button[i-id=ok]").attr("disabled",true);
+            Rails.fire(form, 'submit');
+            return false
+          },
+          cancelValue: '取消',
+          cancel: function () {}
+      });
+      d.showModal();
+    });
+  })
+</script>

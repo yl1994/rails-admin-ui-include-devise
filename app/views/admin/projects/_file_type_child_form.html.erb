@@ -1,0 +1,17 @@
+<%  reloadony ||= false %>
+<% file_type_childrens.each do |file_type_children |%>
+  <div class="ml20">
+    <div class="bd-callout bd-callout-info">
+      <h6 class="m-0 font-weight-bold text-primary" data-toggle="collapse" href="#file_type_children_<%= file_type_children.id%>" file_type_children_id="<%= file_type_children.id%>"><%= file_type_children.name %>
+        <% if file_type_children.desc.present? %>
+          (<%= file_type_children.desc %>)
+        <% end %>
+        <div class="float-right"><%= file_type_hash[file_type_children.id].to_i %>/<%= file_type_children.children_count %></div>
+      </h6>
+    </div>
+ 
+  </div>
+  <div class="collapse  file_types" id="file_type_children_<%= file_type_children.id%>">
+    <%= render partial: 'admin/projects/file_type_three_form',locals: {file_type_childrens:  file_type_children.children,reloadony: reloadony,file_type_hash:file_type_hash  } %> 
+  </div>
+<% end %>

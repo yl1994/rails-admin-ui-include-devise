@@ -1,0 +1,8 @@
+<% if !@flag %>
+  toastr['error']("<%= flash[:error] %>","<%= notice_tip('error') %>")
+  $(".ui-dialog-button button[i-id=ok]").attr("disabled",false);
+<% else %>
+ toastr['success']("<%= flash[:success] %>","<%= notice_tip('success') %>")
+  var d = dialog.get("extract_experts_dialog");
+  d.content("<%= j(render partial: 'extract_message',locals: {extract_experts: @extract_experts,extract_record: @record}) %>");
+<% end %>

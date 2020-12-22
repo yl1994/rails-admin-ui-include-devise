@@ -1,0 +1,55 @@
+<div class="w-75 mx-auto my-5">
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold  py-2">名称</div>
+    <div class="col-10 border  py-2"><%= @user.loginname %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold  py-2">真实姓名</div>
+    <div class="col-10 border  py-2"><%= @user.realname %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold  py-2">邮箱</div>
+    <div class="col-10 border  py-2"><%= @user.email %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold  py-2">手机</div>
+    <div class="col-10 border  py-2"><%= @user.phone %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold py-2">角色</div>
+    <div class="col-10 border  py-2"><%= badges_tag(@user.roles_name) %></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col-2 font-weight-bold py-2">单位</div>
+    <div class="col-10 border  py-2"><%= badges_tag(@user.departments_name) %></div>
+  </div>
+</div>
+<div class="card-body">
+<%= form_for [:admin, @user],url: assign_roles_do_admin_user_path(@user),method: :post do |f| %>
+
+  <div class="table-responsive mt-4">
+    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+      <thead>
+        <tr>
+          <th class="w100">选择角色</th>
+          <th class="w100">角色名称</th>
+        </tr>
+      </thead>
+      <tbody>
+        <%= f.collection_check_boxes( :role_ids, @roles, :id, :name) do |b| %>
+            <tr>
+             <td><%= b.check_box %></td>
+             <td><%= b.label %></td>
+           </tr>
+        <% end %>     
+      </tbody>
+    </table>
+  </div>
+  <div class=" text-center col-md-12 mt-2">
+      <%= f.submit '提交', class: "btn btn-primary" %>
+      <%= link_to_back url: params[:back] || admin_roles_path(@role) %>
+  </div>
+  <% end %>
+</div>
+
+

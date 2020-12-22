@@ -1,0 +1,7 @@
+<% if !@flag %>
+  toastr['error']("<%= flash[:error] %>","<%= notice_tip('error') %>")
+<% else %>
+  //$("#basic_info").html("<%= j(render partial: 'admin/projects/form_readonly'  )%>")
+ // $("#file_info").html("<%= j(render partial: 'admin/projects/file_form',locals: {file_types: @file_types}  )%>")
+  location.href = "<%= admin_project_path(@project)%>"+"?back="+"<%= params[:back] %>";
+<% end %>

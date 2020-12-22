@@ -1,0 +1,13 @@
+var d = dialog({
+  title: '修改状态',
+  content: "<%= j(render partial: 'edit_status')  %>",
+  okValue: '确定',
+    ok: function () {
+      this.title('提交中…');
+      $("#project_status_form").submit();
+      return false
+    },
+    cancelValue: '取消',
+    cancel: function () {}
+});
+d.showModal();

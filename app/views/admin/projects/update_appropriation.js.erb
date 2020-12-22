@@ -1,0 +1,7 @@
+<% if !@flag %>
+  toastr['error']("<%= flash[:error] %>","<%= notice_tip('error') %>")
+<% else %>
+  dialog.get('edit_appropriation_dailog').close().remove();
+  var d = dialog.get('appropriation_list_dialog');
+  d.content( "<%= j(render partial: 'appropriation_list')  %>")
+<% end %>

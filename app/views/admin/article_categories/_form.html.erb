@@ -1,0 +1,27 @@
+<div class="card-header py-3">
+    <h6 class="m-0 font-weight-bold text-primary" id="myModalLabel">新增文章分类</h6>
+</div>
+<%= form_for [:admin, @article_category || ArticleCategory.new], remote: true ,html: {class: 'valid_engine',id: 'article_category_form'} do |f| %>
+<div class="w-75 px-3 mx-auto" style = "line-height: 50px">
+    <div class="d-flex justify-content-start align-items-center">
+        <%= require_span %>
+        <%= f.label :name,class: 'col-sm-4 col-form-label' %>
+        <%= f.text_field :name,class: 'form-control validate[required]' %>
+    </div>
+    <div class="pt-3 d-flex justify-content-start align-items-center">
+        <%= require_span %>
+        <%= f.label :remark,class: 'col-sm-4 col-form-label' %>
+        <%= f.text_field :remark,class: 'form-control validate[required]' %>
+    </div>
+    <%= hidden_field_tag :back_url, params[:back] %>
+</div>
+<div class="w-75 p-3 mx-auto text-center">
+    <%= f.submit '提交', class: "btn btn-primary" %>
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span>关闭</button>
+</div>
+<% end -%>
+<script type="text/javascript">
+$(function() {
+    $("#article_category_form").validationEngine();
+})
+</script>
